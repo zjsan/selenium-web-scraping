@@ -40,7 +40,7 @@ try:
     print("Login successful!")
     
     #navigating through the page and finding an element
-    element = WebDriverWait(driver, 15).until(
+    element = WebDriverWait(driver, 10).until(
           EC.presence_of_element_located((By.XPATH, "//p[@class='chakra-text css-1qawl6f']"))
       )
     print("\n\n",element.text)
@@ -64,7 +64,7 @@ try:
       logging.error("Sidebar button not clickable.")
 
     # Wait for the iframe to be present
-    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
 
     # Switch to the iframe
     driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']"))
