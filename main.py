@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.action_chains import ActionChains
 import logging
 import time 
 import pandas as pd
@@ -13,6 +14,7 @@ import numpy as np
 
 service = Service(executable_path = "chromedriver.exe")
 driver = webdriver.Chrome(service=service)
+
 
 # Login credentials
 username = "jpacang@mmsu.edu.ph"
@@ -82,14 +84,21 @@ try:
     )
     
     try:
+        country_name = "Philippines"
         element = WebDriverWait(driver,10).until(
             EC.presence_of_element_located((By.XPATH, "//div[@class = 'LocationSearch__Container-sc-1dp07t6-0 dhVVKS']"))
         )
         print("found element in the country selection")
-        country = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
-        country.send_keys("Philippines")
-        print("country selected")
-        print(country.text)
+        country_input = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
+        print("----typing country name-----")
+        
+        for char in country_name:
+            country_input.send_keys(char)
+            time.sleep(0.3)
+            if char == "s":
+                country_input.send_keys(Keys.ENTER)
+                
+        
     except Exception as e:
         print(f"Error: {e}")
         print("Can't select country")
@@ -109,6 +118,6 @@ except Exception as e:
     logging.error(f"Error in login found: {e}")
     print(driver.page_source)
 finally:
-    time.sleep(10)
+    time.sleep(15)
     driver.quit()
     
