@@ -93,11 +93,10 @@ try:
         print("----typing country name-----")
         
         for char in country_name:
-            country_input.send_keys(char)
+            country_input.send_keys(char)   
             time.sleep(0.3)
-            if char == "s":
-                country_input.send_keys(Keys.ENTER)
-                
+            for char in country_name:
+                driver.find_element(By.XPATH, "//input[@id='downshift-2-input'").send_keys("value",char)    
         
     except Exception as e:
         print(f"Error: {e}")
