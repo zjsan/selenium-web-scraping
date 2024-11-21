@@ -21,6 +21,8 @@ password = "awanpasswordna"
 wait = WebDriverWait(driver, 10)
 
 try:
+    
+    #putting login credentials in the authentication form
     driver.get("https://auth.timeshighereducation.com/auth/realms/THE/protocol/openid-connect/auth?client_id=DataPoints&redirect_uri=https%3A%2F%2Fwww.timeshighereducation.com%2Fdatapoints%2F&state=b7eafe6e-0f6f-4b21-8950-dcda25d30a03&response_mode=fragment&response_type=code&scope=openid&nonce=79c86488-b331-4a3a-848b-bceee80cecab")
 
     el = wait.until(EC.element_to_be_clickable((By.ID, "username")))
@@ -36,7 +38,33 @@ try:
     driver.get("https://www.timeshighereducation.com/datapoints/")
     print(driver.title)#check for successful login
     print("Login successful!")
+    
+    #navigating through the page and finding an element
+    element = WebDriverWait(driver, 15).until(
+          EC.presence_of_element_located((By.XPATH, "//p[@class='chakra-text css-1qawl6f']"))
+      )
+    print("\n\n",element.text)
+    
+     #-----Navigating the UI to redirect to the desired page: https://www.timeshighereducation.com/datapoints/sdg/details/1-------
+    
+    #clicking the sdg impact button
+    try:
+      click_side_bar = WebDriverWait(driver, 10).until(
+          EC.element_to_be_clickable((By.XPATH, "//button[@class='chakra-button css-1udhqck']"))
+      )
+      click_side_bar.click()
+      print("side_bar button clicked sucessfully")
+      
+      #clicking the link to redirect to https://www.timeshighereducation.com/datapoints/sdg/details/1
+      click_details_link = driver.find_element(By.XPATH, "//ul[@class='css-1ngfogx']/li[2]/a") #finding this elements
+      click_details_link.click()
+      print("redirecting to https://www.timeshighereducation.com/datapoints/sdg/details/1")
+      
+    except TimeoutException:
+      logging.error("Sidebar button not clickable.")
 
+    
+    
 except Exception as e:
     logging.error(f"Error in login found: {e}")
     print(driver.page_source)
