@@ -63,6 +63,7 @@ try:
     except TimeoutException:
       logging.error("Sidebar button not clickable.")
 
+    #if successful redirect
     # Wait for the iframe to be present
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
 
@@ -75,7 +76,24 @@ try:
     print(element.text)
     print("------page redirect success------")
     
+    #interacting with the selecting region and country section of the page
+    element = WebDriverWait(driver, 5).until(
+        EC.presence_of_element_located((By.XPATH, "//div[@class = 'PeerSelectWrapper__Wrapper-sc-brqol7-1 kACRoa']"))
+    )
     
+    try:
+        element = WebDriverWait(driver,5).until(
+            EC.presence_of_element_located((By.XPATH, "//div[@class = 'LocationSearch__Container-sc-1dp07t6-0 dhVVKS']"))
+        )
+        print("found element in the country selection")
+        country = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
+        country.send_keys("Philippines" + Keys.ENTER)
+        print("country selected")
+        print(country.text)
+    except Exception as e:
+        print(f"Error: {e}")
+        print("Can't select country")
+
 except Exception as e:
     logging.error(f"Error in login found: {e}")
     print(driver.page_source)
