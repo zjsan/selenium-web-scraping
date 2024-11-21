@@ -82,21 +82,33 @@ try:
     )
     
     try:
-        element = WebDriverWait(driver,5).until(
+        element = WebDriverWait(driver,10).until(
             EC.presence_of_element_located((By.XPATH, "//div[@class = 'LocationSearch__Container-sc-1dp07t6-0 dhVVKS']"))
         )
         print("found element in the country selection")
         country = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
-        country.send_keys("Philippines" + Keys.ENTER)
+        country.send_keys("Philippines")
         print("country selected")
         print(country.text)
     except Exception as e:
         print(f"Error: {e}")
         print("Can't select country")
 
+    #fetching universities in the form 
+    try:
+        element = driver.find_element(By.XPATH, "//div[@class = 'PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
+        countryitem = WebDriverWait(driver,10).until(
+            EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
+            )
+
+    except Exception as e:
+        print(f"Error: {e}")
+        print("error fetching universities")
+    
 except Exception as e:
     logging.error(f"Error in login found: {e}")
     print(driver.page_source)
 finally:
+    time.sleep(10)
     driver.quit()
     
