@@ -63,6 +63,17 @@ try:
     except TimeoutException:
       logging.error("Sidebar button not clickable.")
 
+    # Wait for the iframe to be present
+    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
+
+    # Switch to the iframe
+    driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']"))
+
+    element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//div[@class='Header__DownloadSectionWrapper-sc-7l4zmc-1 eSouWg']/p"))#find this element in the web page
+    )
+    print(element.text)
+    print("------page redirect success------")
     
     
 except Exception as e:
