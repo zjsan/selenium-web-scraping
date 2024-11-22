@@ -94,6 +94,7 @@ try:
         print("----typing country name-----")
         
         #individually type the country name in the input field
+        #hope it will work this time kase pagod na ako putanginaaaaaaaaaaa
         for char in country_name:
             country_input.send_keys(char)   
             time.sleep(0.3)
@@ -110,9 +111,14 @@ try:
     #fetching universities in the form 
     try:
         element = driver.find_element(By.XPATH, "//div[@class = 'PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
-        countryitem = WebDriverWait(driver,10).until(
-            EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
+        WebDriverWait(driver,10).until(
+            EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']"))
             )
+        print("\n","found universities")
+        country_item = driver.find_elements(By.XPATH("//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button"))
+        print(list(country_item).text)
+        #printing list of countries
+       
 
     except Exception as e:
         print(f"Error: {e}")
