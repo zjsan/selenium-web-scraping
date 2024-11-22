@@ -118,9 +118,25 @@ try:
            EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
            )
         print("\n","found universities")
+        
+        
+        try:
+            # Step 1: Remove Selection Limit via JavaScript
+            # Find the element with data-testid='selected-number' 
+            element = driver.find_element(By.CSS_SELECTOR, "[data-testid='selected-number']")
+            driver.execute_script(""" var element = arguments[0]; element.parentNode.removeChild(element); """, element)
+            driver.execute_script(""" var element = arguments[1]; element.parentNode.removeChild(element); """, element)
+            time.sleep(2)  # Allow time for the change to take effect
+        except Exception as e:
+            print(f"Error: {e}")
+            print("Can't remove selection restriction")
+            
+        #selecting the list elements that contains the names of the universities ---- website has a limit in selecting number of universities, need to fix it
         countryitem = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
         country_length = len(countryitem)
         countryitem_button = driver.find_elements(By.XPATH,"//button[@class='PeerSelect__ListItemButton-sc-cfs1fm-4 caXFaO']")
+        
+        
         #testing if all countries are selected
         for item in range(country_length):
             print(countryitem[item].text)
