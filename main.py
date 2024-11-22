@@ -123,10 +123,16 @@ try:
         try:
             # Step 1: Remove Selection Limit via JavaScript
             # Find the element with data-testid='selected-number' 
-            element = driver.find_element(By.CSS_SELECTOR, "[data-testid='selected-number']")
-            driver.execute_script(""" var element = arguments[0]; element.parentNode.removeChild(element); """, element)
-            driver.execute_script(""" var element = arguments[1]; element.parentNode.removeChild(element); """, element)
+            # Execute JavaScript to remove the selection limit 
+            js_code = """ var element = document.querySelector("[data-testid='selected-number']");
+                          if (element)
+                          { 
+                            element.setAttribute('data-selection-limit', '1000');// Change attribute value if needed 
+                            element.parentNode.removeChild(element); // Remove the element 
+                          } """
+            driver.execute_script(js_code)
             time.sleep(2)  # Allow time for the change to take effect
+            print("sucess removing limit restriction")
         except Exception as e:
             print(f"Error: {e}")
             print("Can't remove selection restriction")
