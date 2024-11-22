@@ -120,9 +120,11 @@ try:
         print("\n","found universities")
         countryitem = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
         country_length = len(countryitem)
+        countryitem_button = driver.find_elements(By.XPATH,"//button[@class='PeerSelect__ListItemButton-sc-cfs1fm-4 caXFaO']")
         #testing if all countries are selected
         for item in range(country_length):
-          print(countryitem[item].text)
+            print(countryitem[item].text)
+            countryitem_button[item].click()
 
 
     except Exception as e:
