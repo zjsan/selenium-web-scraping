@@ -114,11 +114,16 @@ try:
         WebDriverWait(driver,10).until(
             EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']"))
             )
+        WebDriverWait(driver,10).until(
+           EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
+           )
         print("\n","found universities")
-        country_item = driver.find_elements(By.XPATH("//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button"))
-        print(list(country_item).text)
-        #printing list of countries
-       
+        countryitem = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
+        country_length = len(countryitem)
+        #testing if all countries are selected
+        for item in range(country_length):
+          print(countryitem[item].text)
+
 
     except Exception as e:
         print(f"Error: {e}")
