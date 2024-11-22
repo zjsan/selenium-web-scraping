@@ -90,13 +90,24 @@ try:
         )
         print("found element in the country selection")
         country_input = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
+        driver.find_element(By.XPATH, "//div[@role='combobox']").__setattr__("aria-expanded","true")#set combo box value to true to see list of regions/countriess
         print("----typing country name-----")
         
+        #individually type the country name in the input field
         for char in country_name:
             country_input.send_keys(char)   
             time.sleep(0.3)
-            for char in country_name:
-                driver.find_element(By.XPATH, "//input[@id='downshift-2-input'").send_keys("value",char)    
+        
+        try:
+            WebDriverWait(driver,5).until(
+                EC.presence_of_element_located((By.XPATH, "//input[@id='downshift-2-input' and @aria-activedescendant='downshift-3-item-80']"))
+            )
+            desired_country = driver.find_element(By.XPATH, "//input[@id='downshift-2-input' and @aria-activedescendant='downshift-3-item-80']")
+            desired_country.click()
+        except Exception as e:
+            print(f"Error: {e}")
+            print("Can't select country name")
+            
         
     except Exception as e:
         print(f"Error: {e}")
