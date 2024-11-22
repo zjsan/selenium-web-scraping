@@ -124,15 +124,21 @@ try:
             # Step 1: Remove Selection Limit via JavaScript
             # Find the element with data-testid='selected-number' 
             # Execute JavaScript to remove the selection limit 
-            js_code = """ var element = document.querySelector("[data-testid='selected-number']");
-                          if (element)
-                          { 
-                            element.setAttribute('data-selection-limit', '1000');// Change attribute value if needed 
-                            element.parentNode.removeChild(element); // Remove the element 
-                          } """
-            driver.execute_script(js_code)
-            time.sleep(2)  # Allow time for the change to take effect
+            # Find the element with data-testid='selected-number' 
+            element = driver.find_element(By.XPATH, "//button[@class ='PeerSelect__Tab-sc-cfs1fm-2 cKpits']") # Execute JavaScript to manipulate or remove the selection limit 
+            # Example: Remove the element from the DOM 
+            def remove_selection_limit():
+                driver.execute_script(""" var element = arguments[0]; element.parentNode.removeChild(element); """, element)
+            
+            # Continuously check and remove the element for a certain period
+            start_time = time.time() 
+            timeout = 30 
+            while time.time() - start_time < timeout:
+                remove_selection_limit() 
+                time.sleep(1) # Wait before checking again
+                
             print("sucess removing limit restriction")
+            
         except Exception as e:
             print(f"Error: {e}")
             print("Can't remove selection restriction")
