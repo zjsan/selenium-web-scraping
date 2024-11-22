@@ -97,18 +97,12 @@ try:
         for char in country_name:
             country_input.send_keys(char)   
             time.sleep(0.3)
-        
-        try:
-            WebDriverWait(driver,5).until(
-                EC.presence_of_element_located((By.XPATH, "//input[@id='downshift-2-input' and @aria-activedescendant='downshift-3-item-80']"))
-            )
-            desired_country = driver.find_element(By.XPATH, "//input[@id='downshift-2-input' and @aria-activedescendant='downshift-3-item-80']")
-            desired_country.click()
-        except Exception as e:
-            print(f"Error: {e}")
-            print("Can't select country name")
-            
-        
+
+            if char == "s":
+                country_input.send_keys(Keys.ARROW_DOWN)
+                country_input.send_keys(Keys.ENTER)
+        print("-----Sucessfully selected region/country------")
+          
     except Exception as e:
         print(f"Error: {e}")
         print("Can't select country")
