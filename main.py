@@ -117,8 +117,7 @@ try:
         WebDriverWait(driver,10).until(
            EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
            )
-        print("\n","found universities")
-        
+        print("\n,found universities\n")
         
         try:
             # Step 1: Remove Selection Limit via JavaScript
@@ -127,17 +126,8 @@ try:
             # Find the element with data-testid='selected-number' 
             element = driver.find_element(By.XPATH, "//button[@class ='PeerSelect__Tab-sc-cfs1fm-2 cKpits']") # Execute JavaScript to manipulate or remove the selection limit 
             # Example: Remove the element from the DOM 
-            def remove_selection_limit():
-                driver.execute_script(""" var element = arguments[0]; element.parentNode.removeChild(element); """, element)
-            
-            # Continuously check and remove the element for a certain period
-            start_time = time.time() 
-            timeout = 30 
-            while time.time() - start_time < timeout:
-                remove_selection_limit() 
-                time.sleep(1) # Wait before checking again
-                
-            print("sucess removing limit restriction")
+            driver.execute_script("""document.querySelector("[class='PeerSelect__Tab-sc-cfs1fm-2 cKpits']").remove();""")#sucessfully removed the element but limitr restriction still exist
+            print("----sucess removing limit restriction----")
             
         except Exception as e:
             print(f"Error: {e}")
@@ -152,8 +142,13 @@ try:
         #testing if all countries are selected
         for item in range(country_length):
             print(countryitem[item].text)
+            
+            #making the button click faster to select all universities in the list 
+            #try:
             countryitem_button[item].click()
-
+                #continue
+            #except:
+                # break
 
     except Exception as e:
         print(f"Error: {e}")
