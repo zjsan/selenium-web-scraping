@@ -7,6 +7,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.alert import Alert
+
 import logging
 import time 
 import pandas as pd
@@ -108,8 +110,9 @@ try:
         print(f"Error: {e}")
         print("Can't select country")
 
-    #fetching universities in the form 
+    #selecting element from universities
     try:
+        #selecting the container for the list of university
         element = driver.find_element(By.XPATH, "//div[@class = 'PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
         WebDriverWait(driver,10).until(
             EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']"))
@@ -140,39 +143,49 @@ try:
                     }
 
                     // Overwrite event listeners or limit-enforcing functions
-                    alert('Selection bypassed.');
-                    alert('Event listeners modified.');
+                    //alert('Selection bypassed.');
+                    //alert('Event listeners modified.');
                 }
             """)#sucessfully removed the element but limitr restriction still exist
+            # Assuming an alert pops up after a certain action
+           # alert = Alert(driver)
+            #alert.accept()
+            print('Selection bypassed.')
+            print('Event listeners modified.')
             time.sleep(1)  # Allow time for the changes to take effect
 
             print("----sucess removing limit restriction----")
+            
+            
+            #selecting the list elements that contains the names of the universities ---- website has a limit in selecting number of universities, need to fix it
+            try:
+                countryitem = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
+                country_length = len(countryitem)
+                countryitem_button = driver.find_elements(By.XPATH,"//button[@class='PeerSelect__ListItemButton-sc-cfs1fm-4 caXFaO']")
+                
+                
+                #testing if all countries are selected
+                click_count = 0#counter for how many times the university's button clicked
+                for item in range(country_length):
+                    print(countryitem[item].text)
+                    
+                    #making the button click faster to select all universities in the list 
+                    try:
+                        countryitem_button[item].click()
+                        click_count += 1
+                        continue
+                    except:
+                        break
+                print("----Universities are printed----\n")
+                print("Button was clicked: " + str(click_count) + " times")
+            except Exception as e:
+                print(f"Error: {e}")
+                print("error on clicking university buttons")  
             
         except Exception as e:
             print(f"Error: {e}")
             print("Can't remove selection restriction")
             
-        #selecting the list elements that contains the names of the universities ---- website has a limit in selecting number of universities, need to fix it
-        countryitem = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
-        country_length = len(countryitem)
-        countryitem_button = driver.find_elements(By.XPATH,"//button[@class='PeerSelect__ListItemButton-sc-cfs1fm-4 caXFaO']")
-        
-        
-        #testing if all countries are selected
-        click_count = 0#counter for how many times the university's button clicked
-        for item in range(country_length):
-            print(countryitem[item].text)
-            
-            #making the button click faster to select all universities in the list 
-            try:
-                countryitem_button[item].click()
-                click_count += 1
-                continue
-            except:
-                break
-        print("----Universities are printed----\n")
-        print("Button was clicked: " + str(click_count) + "times")        
-        
     except Exception as e:
         print(f"Error: {e}")
         print("error fetching universities")
