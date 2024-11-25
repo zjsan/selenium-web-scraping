@@ -117,7 +117,7 @@ try:
         WebDriverWait(driver,10).until(
            EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
            )
-        print("\n,found universities\n")
+        print("\nfound universities\n")
         
         try:
             # Step 1: Remove Selection Limit via JavaScript
@@ -126,7 +126,26 @@ try:
             # Find the element with data-testid='selected-number' 
             element = driver.find_element(By.XPATH, "//button[@class ='PeerSelect__Tab-sc-cfs1fm-2 cKpits']") # Execute JavaScript to manipulate or remove the selection limit 
             # Example: Remove the element from the DOM 
-            driver.execute_script("""document.querySelector("[class='PeerSelect__Tab-sc-cfs1fm-2 cKpits']").remove();""")#sucessfully removed the element but limitr restriction still exist
+            driver.execute_script("""
+                const maxSelectionLimit = 1000;
+                const limitElement = document.querySelector('[data-testid="selected-number"]');
+
+                if (limitElement) {
+                    console.log('Found limit element:', limitElement.innerText);
+
+                    const parent = limitElement.closest('[data-testid]');
+                    if (parent) {
+                        parent.setAttribute('data-max', maxSelectionLimit);
+                        console.log('Modified selection limit to:', maxSelectionLimit);
+                    }
+
+                    // Overwrite event listeners or limit-enforcing functions
+                    alert('Selection bypassed.');
+                    alert('Event listeners modified.');
+                }
+            """)#sucessfully removed the element but limitr restriction still exist
+            time.sleep(1)  # Allow time for the changes to take effect
+
             print("----sucess removing limit restriction----")
             
         except Exception as e:
@@ -140,16 +159,20 @@ try:
         
         
         #testing if all countries are selected
+        click_count = 0#counter for how many times the university's button clicked
         for item in range(country_length):
             print(countryitem[item].text)
             
             #making the button click faster to select all universities in the list 
-            #try:
-            countryitem_button[item].click()
-                #continue
-            #except:
-                # break
-
+            try:
+                countryitem_button[item].click()
+                click_count += 1
+                continue
+            except:
+                break
+        print("----Universities are printed----\n")
+        print("Button was clicked: " + str(click_count) + "times")        
+        
     except Exception as e:
         print(f"Error: {e}")
         print("error fetching universities")
