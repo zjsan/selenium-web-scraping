@@ -170,8 +170,10 @@ try:
                     print(countryitem[item].text)
                     
                     #making the button click faster to select all universities in the list 
+                    print("\n\n----checking university names via button---")
                     try:
                         countryitem_button[item].click()
+                        print(countryitem_button[item].text)
                         click_count += 1
                         continue
                     except:
