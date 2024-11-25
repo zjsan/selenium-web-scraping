@@ -189,11 +189,30 @@ try:
     except Exception as e:
         print(f"Error: {e}")
         print("error fetching universities")
+        
+    #going to next part
+    #clicking the APPLY button
+    apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
+    apply_button.click()
     
+    table_button = driver.find_element(By.XPATH,"//button[@class='TabSelector__Tab-sc-x9oxnj-1 zLZxw']")
+    table_button.click()
+    
+    # #next step clicking download button
+    # download = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
+    # download.click()
+    
+    #clicking download excel file
+    # element = WebDriverWait(driver,3).until(
+    #     EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
+    # )
+    # download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
+    # download_excel.click()
+    print("\nScrapping Done")
 except Exception as e:
     logging.error(f"Error in login found: {e}")
     print(driver.page_source)
 finally:
-    time.sleep(15)
+    time.sleep(90)
     driver.quit()
     
