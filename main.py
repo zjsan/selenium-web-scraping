@@ -150,7 +150,6 @@ try:
                     //alert('Event listeners modified.');
                 }
             """)#sucessfully removed the element but limit restriction still exist
-            driver.execute_script("""document.querySelector("[class='PeerSelect__Tab-sc-cfs1fm-2 cKpits']").remove();""")#removing the button
             # Assuming an alert pops up after a certain action
            # alert = Alert(driver)
             #alert.accept()
@@ -178,9 +177,10 @@ try:
                         university_item_button[item].click()
                         if university_item_button:
                             click_count += 1#increase the click counter
-                        continue
+                            continue
                     except:
-                        break                
+                        break
+                    
                 print("----Universities are printed----\n")
                 print("Button was clicked: " + str(click_count) + " times")
             except Exception as e:
@@ -205,6 +205,7 @@ try:
     table_button = driver.find_element(By.XPATH,"//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
     table_button.click()    
     print("---Table button clicked---")
+    
     #manually inspecting the element after the table button clicked
     
     #commented out to check the code above
@@ -218,9 +219,7 @@ try:
     )
     download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
     download_excel.click()
-    
     print("\n-----Scrapping Done-----")
-    
     
 except Exception as e:
     logging.error(f"Error in login found: {e}")
