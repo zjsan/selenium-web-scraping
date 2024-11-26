@@ -150,6 +150,7 @@ try:
                     //alert('Event listeners modified.');
                 }
             """)#sucessfully removed the element but limit restriction still exist
+            driver.execute_script("""document.querySelector("[class='PeerSelect__Tab-sc-cfs1fm-2 cKpits']").remove();""")#removing the button
             # Assuming an alert pops up after a certain action
            # alert = Alert(driver)
             #alert.accept()
@@ -173,12 +174,13 @@ try:
                     print(university_name[item].text)
                     
                     #clicking the university name's button
-                    university_item_button[item].click()
-                    time.sleep(0.4)#making the click slower
-                    
-                    if university_item_button:
-                        click_count += 1#increase the click counter
-                    
+                    try:
+                        university_item_button[item].click()
+                        if university_item_button:
+                            click_count += 1#increase the click counter
+                        continue
+                    except:
+                        break                
                 print("----Universities are printed----\n")
                 print("Button was clicked: " + str(click_count) + " times")
             except Exception as e:
@@ -206,17 +208,20 @@ try:
     #manually inspecting the element after the table button clicked
     
     #commented out to check the code above
-    # #next step clicking download button
-    # download = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
-    # download.click()
+    #next step clicking download button
+    download = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
+    download.click()
     
     #clicking download excel file
-    # element = WebDriverWait(driver,3).until(
-    #     EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
-    # )
-    # download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
-    # download_excel.click()
+    element = WebDriverWait(driver,3).until(
+        EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
+    )
+    download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
+    download_excel.click()
+    
     print("\n-----Scrapping Done-----")
+    
+    
 except Exception as e:
     logging.error(f"Error in login found: {e}")
     print(driver.page_source)
