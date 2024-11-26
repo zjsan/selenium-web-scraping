@@ -175,7 +175,7 @@ try:
                     #clicking the university name's button
                     
                     university_item_button[item].click()
-                    time.sleep(0.2)
+                    time.sleep(0.3)
                     if university_item_button:
                         click_count += 1#increase the click counter
                         continue
