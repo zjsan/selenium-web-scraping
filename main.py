@@ -124,17 +124,15 @@ try:
         print("\nfound universities\n")
         
         try:
-            
-            # Remove Selection Limit via JavaScript
-            # Find the element with class = 'PeerSelect__Tab-sc-cfs1fm-2 cKpits'
+            # Step 1: Remove Selection Limit via JavaScript
+            # Find the element with data-testid='selected-number' 
             # Execute JavaScript to remove the selection limit 
-            
+            # Find the element with data-testid='selected-number' 
             element = driver.find_element(By.XPATH, "//button[@class ='PeerSelect__Tab-sc-cfs1fm-2 cKpits']") # Execute JavaScript to manipulate or remove the selection limit 
-            
-            # Remove the element from the DOM 
+            # Example: Remove the element from the DOM 
             driver.execute_script("""
                 const maxSelectionLimit = 1000;
-                const limitElement = document.querySelector('button[type="button"].PeerSelect_Tab-sc-cfs1fm-2.ckpits');
+                const limitElement = document.querySelector('[data-testid="selected-number"]');
 
                 if (limitElement) {
                     console.log('Found limit element:', limitElement.innerText);
@@ -149,15 +147,7 @@ try:
                     //alert('Selection bypassed.');
                     //alert('Event listeners modified.');
                 }
-            """)#sucessfully removed the element but limit restriction still exist
-            # Assuming an alert pops up after a certain action
-           # alert = Alert(driver)
-            #alert.accept()
-            print('Selection bypassed.')
-            print('Event listeners modified.')
-            time.sleep(3)  # Allow time for the changes to take effect
-
-            print("----sucess removing limit restriction----")
+            """)#sucessfully removed the element but limitr restriction still exist
             
             
             #selecting the list elements that contains the names of the universities ---- website has a limit in selecting number of universities, need to fix it
