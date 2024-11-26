@@ -162,21 +162,21 @@ try:
             
             #selecting the list elements that contains the names of the universities ---- website has a limit in selecting number of universities, need to fix it
             try:
-                countryitem = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
-                country_length = len(countryitem)
-                countryitem_button = driver.find_elements(By.XPATH,"//button[@class='PeerSelect__ListItemButton-sc-cfs1fm-4 caXFaO']")
+                university_name = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
+                university_length = len(university_name)
+                university_item_button = driver.find_elements(By.XPATH,"//button[@class='PeerSelect__ListItemButton-sc-cfs1fm-4 caXFaO']")
                 
                 
                 #testing if all countries are selected
                 click_count = 0#counter for how many times the university's button clicked
-                for item in range(country_length):
-                    print(countryitem[item].text)
+                for item in range(university_length):
+                    print(university_name[item].text)
                     
                     #clicking the university name's button
-                    countryitem_button[item].click()
+                    university_item_button[item].click()
                     time.sleep(0.4)#making the click slower
                     
-                    if countryitem_button:
+                    if university_item_button:
                         click_count += 1#increase the click counter
                     
                 print("----Universities are printed----\n")
