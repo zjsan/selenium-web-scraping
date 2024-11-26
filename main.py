@@ -134,7 +134,7 @@ try:
             # Remove the element from the DOM 
             driver.execute_script("""
                 const maxSelectionLimit = 1000;
-                const limitElement = document.querySelector('[data-testid="selected-number"]');
+                const limitElement = document.querySelector('button[type="button"].PeerSelect_Tab-sc-cfs1fm-2.ckpits');
 
                 if (limitElement) {
                     console.log('Found limit element:', limitElement.innerText);
@@ -155,7 +155,7 @@ try:
             #alert.accept()
             print('Selection bypassed.')
             print('Event listeners modified.')
-            time.sleep(1)  # Allow time for the changes to take effect
+            time.sleep(3)  # Allow time for the changes to take effect
 
             print("----sucess removing limit restriction----")
             
@@ -173,13 +173,13 @@ try:
                     print(university_name[item].text)
                     
                     #clicking the university name's button
-                    try:
-                        university_item_button[item].click()
-                        if university_item_button:
-                            click_count += 1#increase the click counter
-                            continue
-                    except:
-                        break
+                    
+                    university_item_button[item].click()
+                    time.sleep(0.2)
+                    if university_item_button:
+                        click_count += 1#increase the click counter
+                        continue
+
                     
                 print("----Universities are printed----\n")
                 print("Button was clicked: " + str(click_count) + " times")
@@ -206,8 +206,12 @@ try:
     table_button.click()    
     print("---Table button clicked---")
     
-    #manually inspecting the element after the table button clicked
+
+    element = WebDriverWait(driver,3).until(
+        EC.presence_of_element_located((By.XPATH, "//tr[@class='ImpactDetailsTable__TableRow-sc-y0nk0g-5 kRGomT']"))
+    )#wait for the rows to load 
     
+    #manually inspecting the element after the table button clicked
     #commented out to check the code above
     #next step clicking download button
     download = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
@@ -219,12 +223,14 @@ try:
     )
     download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
     download_excel.click()
+    
     print("\n-----Scrapping Done-----")
+        
     
 except Exception as e:
     logging.error(f"Error in login found: {e}")
     print(driver.page_source)
 finally:
-    time.sleep(70)
+    time.sleep(60)
     driver.quit()
     
