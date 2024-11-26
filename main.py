@@ -123,12 +123,14 @@ try:
         print("\nfound universities\n")
         
         try:
-            # Step 1: Remove Selection Limit via JavaScript
-            # Find the element with data-testid='selected-number' 
+            
+            # Remove Selection Limit via JavaScript
+            # Find the element with class = 'PeerSelect__Tab-sc-cfs1fm-2 cKpits'
             # Execute JavaScript to remove the selection limit 
-            # Find the element with data-testid='selected-number' 
+            
             element = driver.find_element(By.XPATH, "//button[@class ='PeerSelect__Tab-sc-cfs1fm-2 cKpits']") # Execute JavaScript to manipulate or remove the selection limit 
-            # Example: Remove the element from the DOM 
+            
+            # Remove the element from the DOM 
             driver.execute_script("""
                 const maxSelectionLimit = 1000;
                 const limitElement = document.querySelector('[data-testid="selected-number"]');
@@ -146,7 +148,7 @@ try:
                     //alert('Selection bypassed.');
                     //alert('Event listeners modified.');
                 }
-            """)#sucessfully removed the element but limitr restriction still exist
+            """)#sucessfully removed the element but limit restriction still exist
             # Assuming an alert pops up after a certain action
            # alert = Alert(driver)
             #alert.accept()
@@ -169,15 +171,10 @@ try:
                 for item in range(country_length):
                     print(countryitem[item].text)
                     
-                    #making the button click faster to select all universities in the list 
-                    print("\n\n----checking university names via button---")
-                    try:
-                        countryitem_button[item].click()
-                        print(countryitem_button[item].text)
-                        click_count += 1
-                        continue
-                    except:
-                        break
+                    countryitem_button[item].click()
+                    time.sleep(0.3)#making the click slower
+                    click_count += 1
+                    
                 print("----Universities are printed----\n")
                 print("Button was clicked: " + str(click_count) + " times")
             except Exception as e:
@@ -194,11 +191,14 @@ try:
         
     #going to next part
     #clicking the APPLY button
+    print("Clicking Apply button\n")
     apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
     apply_button.click()
-    
-    table_button = driver.find_element(By.XPATH,"//button[@class='TabSelector__Tab-sc-x9oxnj-1 zLZxw']")
-    table_button.click()
+    print("Apply button clicked\n")
+    print("Clicking Table button\n")
+    table_button = driver.find_element(By.XPATH,"//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
+    table_button.click()    
+    print("Table button clicked")
     
     # #next step clicking download button
     # download = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
@@ -210,11 +210,11 @@ try:
     # )
     # download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
     # download_excel.click()
-    print("\nScrapping Done")
+    print("\n-----Scrapping Done-----")
 except Exception as e:
     logging.error(f"Error in login found: {e}")
     print(driver.page_source)
 finally:
-    time.sleep(90)
+    time.sleep(10)
     driver.quit()
     
