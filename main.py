@@ -85,6 +85,7 @@ try:
         EC.presence_of_element_located((By.XPATH, "//div[@class = 'PeerSelectWrapper__Wrapper-sc-brqol7-1 kACRoa']"))
     )
     
+    #entering input in the country/region selection
     try:
         country_name = "Philippines"
         element = WebDriverWait(driver,10).until(
@@ -171,9 +172,12 @@ try:
                 for item in range(country_length):
                     print(countryitem[item].text)
                     
+                    #clicking the university name's button
                     countryitem_button[item].click()
-                    time.sleep(0.3)#making the click slower
-                    click_count += 1
+                    time.sleep(0.4)#making the click slower
+                    
+                    if countryitem_button:
+                        click_count += 1#increase the click counter
                     
                 print("----Universities are printed----\n")
                 print("Button was clicked: " + str(click_count) + " times")
@@ -191,15 +195,17 @@ try:
         
     #going to next part
     #clicking the APPLY button
-    print("Clicking Apply button\n")
+    print("\n---Clicking Apply button---\n")
     apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
     apply_button.click()
-    print("Apply button clicked\n")
-    print("Clicking Table button\n")
+    print("---Apply button clicked---\n")
+    print("---Clicking Table button---\n")
     table_button = driver.find_element(By.XPATH,"//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
     table_button.click()    
-    print("Table button clicked")
+    print("---Table button clicked---")
+    #manually inspecting the element after the table button clicked
     
+    #commented out to check the code above
     # #next step clicking download button
     # download = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
     # download.click()
@@ -215,6 +221,6 @@ except Exception as e:
     logging.error(f"Error in login found: {e}")
     print(driver.page_source)
 finally:
-    time.sleep(10)
+    time.sleep(70)
     driver.quit()
     
