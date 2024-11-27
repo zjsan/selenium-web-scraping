@@ -144,8 +144,8 @@ try:
                     }
 
                     // Overwrite event listeners or limit-enforcing functions
-                    //alert('Selection bypassed.');
-                    //alert('Event listeners modified.');
+                    window.onSelect = () => console.log("Selection bypassed.");
+                    console.log("Event listeners modified.");
                 }
             """)#sucessfully removed the element but limitr restriction still exist
              # Example: Remove the element from the DOM 
@@ -154,7 +154,7 @@ try:
             #selecting the list elements that contains the names of the universities ---- website has a limit in selecting number of universities, need to fix it
             try:
                 
-                university_name_elements = WebDriverWait(driver, 10).until(
+                university_name_elements = WebDriverWait(driver, 5).until(
                     EC.presence_of_all_elements_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li"))
                 )
                 university_name = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
@@ -164,7 +164,7 @@ try:
                     EC.presence_of_all_elements_located((By.XPATH, "//button[@class='PeerSelect__ListItemButton-sc-cfs1fm-4 caXFaO']"))
                 )
                 university_item_button = driver.find_elements(By.XPATH,"//button[@class='PeerSelect__ListItemButton-sc-cfs1fm-4 caXFaO']")
-                time.sleep(3)
+                time.sleep(2)
                 #testing if all countries are selected
                 click_count = 0#counter for how many times the university's button clicked
                 for item in range(university_length):
@@ -173,7 +173,6 @@ try:
                     #clicking the university name's button
                     print(f"Clicking button: {university_item_button[item].text}")
                     university_item_button[item].click()
-                    time.sleep(0.3)
                     if university_item_button:
                         click_count += 1#increase the click counter
                         continue   
@@ -214,8 +213,10 @@ try:
     except Exception as e:
         print(f"Error: {e}") 
         print("Error on loading javascript")
+    
+    time.sleep(1)
     try:
-        element = WebDriverWait(driver,15).until(
+        element = WebDriverWait(driver,10).until(
             EC.presence_of_element_located((By.XPATH, "//tr[@class='ImpactDetailsTable__TableRow-sc-y0nk0g-5 kRGomT']"))
         )#wait for the rows to load 
         print("\n---Located Table rows---\n")
