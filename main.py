@@ -13,6 +13,8 @@ import logging
 import time 
 import pandas as pd
 import numpy as np
+import os
+
 
 service = Service(executable_path = "chromedriver.exe")
 driver = webdriver.Chrome(service=service)
@@ -111,138 +113,112 @@ try:
         print(f"Error: {e}")
         print("Can't select country")
 
-    #selecting element from universities
+    # Selecting elements from universities
     try:
-        #selecting the container for the list of university
-        element = driver.find_element(By.XPATH, "//div[@class = 'PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
-        WebDriverWait(driver,10).until(
+        # Selecting the container for the list of universities
+        element = driver.find_element(By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']"))
-            )
-        WebDriverWait(driver,10).until(
-           EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
-           )
-        print("\nfound universities\n")
-        
-        try:
-            # Step 1: Remove Selection Limit via JavaScript
-            # Find the element with data-testid='selected-number' 
-            # Execute JavaScript to remove the selection limit 
-            # Find the element with data-testid='selected-number' 
-            element = driver.find_element(By.XPATH, "//button[@class ='PeerSelect__Tab-sc-cfs1fm-2 cKpits']") # Execute JavaScript to manipulate or remove the selection limit 
-            # Example: Remove the element from the DOM 
-            driver.execute_script("""
-                const maxSelectionLimit = 1000;
-                const limitElement = document.querySelector('[data-testid="selected-number"]');
+        )
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
+        )
+        print("\nFound universities\n")
 
-                if (limitElement) {
-                    console.log('Found limit element:', limitElement.innerText);
+        # Select all university buttons
+        university_name_buttons = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
+        university_length = len(university_name_buttons)
+        print(f"Total universities found: {university_length}")
 
-                    const parent = limitElement.closest('[data-testid]');
-                    if (parent) {
-                        parent.setAttribute('data-max', maxSelectionLimit);
-                        console.log('Modified selection limit to:', maxSelectionLimit);
-                    }
+        batch_size = 35  # Number of universities to process per batch
+        click_count = 0  # Counter for clicks
 
-                    // Overwrite event listeners or limit-enforcing functions
-                    window.onSelect = () => console.log("Selection bypassed.");
-                    console.log("Event listeners modified.");
-                }
-            """)#sucessfully removed the element but limitr restriction still exist
-             # Example: Remove the element from the DOM 
-            driver.execute_script("""document.querySelector("[class='PeerSelect__Tab-sc-cfs1fm-2 cKpits']").remove();""")#sucessfully removed the element but limitr restriction still exist
-            time.sleep(5)
-            #selecting the list elements that contains the names of the universities ---- website has a limit in selecting number of universities, need to fix it
+        # Process universities in batches
+        for batch_start in range(0, university_length, batch_size):
+            # Reset selections if not the first batch
+            if batch_start > 0:
+                try:
+                    reset_button = driver.find_element(By.XPATH, "//button[text()='Reset benchmark']")
+                    reset_button.click()
+                    time.sleep(2)  # Allow time for reset
+                    print("Selections reset for the next batch")
+                except Exception as e:
+                    print("No reset button found or reset failed")
+
+            # Select universities in the current batch
+            for index in range(batch_start, min(batch_start + batch_size, university_length)):
+                try:
+                    university_name_buttons[index].click()
+                    click_count += 1
+                    print(f"Selected: {university_name_buttons[index].text}")
+                    time.sleep(0.5)  # Pause for UI responsiveness
+                except Exception as e:
+                    print(f"Error clicking university button at index {index}: {e}")
+
+            print(f"Batch {batch_start // batch_size + 1} - Selected {click_count} universities")
+
+            # Apply selections
             try:
-                
-                university_name_elements = WebDriverWait(driver, 5).until(
-                    EC.presence_of_all_elements_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li"))
-                )
-                university_name = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
-                university_length = len(university_name)
-
-                university_name_button_elements = WebDriverWait(driver, 10).until(
-                    EC.presence_of_all_elements_located((By.XPATH, "//button[@class='PeerSelect__ListItemButton-sc-cfs1fm-4 caXFaO']"))
-                )
-                university_item_button = driver.find_elements(By.XPATH,"//button[@class='PeerSelect__ListItemButton-sc-cfs1fm-4 caXFaO']")
+                print("\n---Clicking Apply button---\n")
+                apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
+                apply_button.click()
                 time.sleep(2)
-                #testing if all countries are selected
-                click_count = 0#counter for how many times the university's button clicked
-                for item in range(university_length):
-                    print(university_name[item].text)
-                    
-                    #clicking the university name's button
-                    print(f"Clicking button: {university_item_button[item].text}")
-                    university_item_button[item].click()
-                    if university_item_button:
-                        click_count += 1#increase the click counter
-                        continue   
-                print("----Universities are printed----\n")
-                print("Button was clicked: " + str(click_count) + " times")
+
+                # Click the Table button
+                print("---Clicking Table button---\n")
+                table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
+                table_button.click()
+                time.sleep(2)
+                print("---Table button clicked---")
+
+                # Download the Excel file for the current batch
+                element = WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
+                )
+                download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
+                download_button.click()
+                print("\n---Download button clicked---\n")
+
+                WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
+                )
+                download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
+                download_excel.click()
+                print(f"\n---Batch {batch_start // batch_size + 1} downloaded---\n")
+                time.sleep(5)  # Wait for download completion
+
             except Exception as e:
-                print(f"Error: {e}")
-                print("error on clicking university buttons")  
-            
-        except Exception as e:
-            print(f"Error: {e}")
-            print("Can't remove selection restriction")
-            
+                print(f"Error during Apply/Table/Download steps in Batch {batch_start // batch_size + 1}: {e}")
+
+        print("\nAll batches processed successfully\n")
+
     except Exception as e:
         print(f"Error: {e}")
-        print("error fetching universities")
-    
-    #setting delays to wait for the javascript code to load properly
-    try:
-        element = WebDriverWait(driver,5).until(
-                EC.presence_of_element_located((By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']"))
-            )#wait for the rows to load 
-        time.sleep(3)#applying delay for the button interaction    
-        #going to next part
-        #clicking the APPLY button
-        print("\n---Clicking Apply button---\n")
-        apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
-        apply_button.click()
-        
-        print("---Apply button clicked---\n")
-        print("---Clicking Table button---\n")
-        
-        time.sleep(3)#applying delay for the button interaction    
-        table_button = driver.find_element(By.XPATH,"//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
-        table_button.click()    
-        print("---Table button clicked---")
-        
-    except Exception as e:
-        print(f"Error: {e}") 
-        print("Error on loading javascript")
-    
-    time.sleep(1)
-    try:
-        element = WebDriverWait(driver,10).until(
-            EC.presence_of_element_located((By.XPATH, "//tr[@class='ImpactDetailsTable__TableRow-sc-y0nk0g-5 kRGomT']"))
-        )#wait for the rows to load 
-        print("\n---Located Table rows---\n")
-        
-        #manually inspecting the element after the table button clicked
-        #commented out to check the code above
-        #next step clix
-        #clicking download excel file
-        element = WebDriverWait(driver,4).until(
-            EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
-        )
-        download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
-        download_button.click()
-        print("\n---Download button clicked ---\n")
-    except Exception as e:
-        print(f"Error: {e}") 
-        print("Error on locating the table rows")
-           
-    time.sleep(3) #applying delay for the button interaction   
-    download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
-    download_excel.click()
-    print("\n---Download excel file clicked ---\n")
-    
-    print("\n-----Scrapping Done-----")
-        
-    
+        print("Error fetching universities")
+
+    # Final processing or merging (if needed)
+    # Directory where files are saved
+    directory = r'Documents/SDG Datas/Scraping'
+
+    # List all Excel files in the directory
+    excel_files = [f for f in os.listdir(directory) if f.endswith('.xlsx')]
+
+    # Initialize an empty DataFrame
+    merged_data = pd.DataFrame()
+
+    # Loop through each file and append its content
+    for file in excel_files:
+        file_path = os.path.join(directory, file)
+        data = pd.read_excel(file_path)
+        merged_data = pd.concat([merged_data, data], ignore_index=True)
+
+    # Save the merged file
+    merged_file_path = os.path.join(directory, 'Merged_Universities_Data.xlsx')
+    merged_data.to_excel(merged_file_path, index=False)
+
+    print(f"Merged file saved at: {merged_file_path}")
+    print("\n-----Scraping Done-----")
+
 except Exception as e:
     logging.error(f"Error in login found: {e}")
     print(driver.page_source)
