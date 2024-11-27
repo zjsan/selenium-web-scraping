@@ -148,12 +148,18 @@ try:
                     //alert('Event listeners modified.');
                 }
             """)#sucessfully removed the element but limitr restriction still exist
-            
+             # Example: Remove the element from the DOM 
+            driver.execute_script("""document.querySelector("[class='PeerSelect__Tab-sc-cfs1fm-2 cKpits']").remove();""")#sucessfully removed the element but limitr restriction still exist
             
             #selecting the list elements that contains the names of the universities ---- website has a limit in selecting number of universities, need to fix it
             try:
+                
+                university_name_elements = WebDriverWait(driver, 10).until(
+                    EC.presence_of_all_elements_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li"))
+                )
                 university_name = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
                 university_length = len(university_name)
+               
                 university_item_button = driver.find_elements(By.XPATH,"//button[@class='PeerSelect__ListItemButton-sc-cfs1fm-4 caXFaO']")
                 
                 
@@ -163,9 +169,9 @@ try:
                     print(university_name[item].text)
                     
                     #clicking the university name's button
-                    
+                    print(f"Clicking button: {university_item_button[item].text}")
                     university_item_button[item].click()
-                    time.sleep(0.3)
+                    time.sleep(0.5)
                     if university_item_button:
                         click_count += 1#increase the click counter
                         continue
@@ -184,35 +190,46 @@ try:
     except Exception as e:
         print(f"Error: {e}")
         print("error fetching universities")
-        
+    
+    time.sleep(2)#applying delay for the button interaction    
     #going to next part
     #clicking the APPLY button
     print("\n---Clicking Apply button---\n")
     apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
     apply_button.click()
+    
     print("---Apply button clicked---\n")
     print("---Clicking Table button---\n")
+    
+    time.sleep(2)#applying delay for the button interaction    
     table_button = driver.find_element(By.XPATH,"//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
     table_button.click()    
     print("---Table button clicked---")
     
-
-    element = WebDriverWait(driver,3).until(
-        EC.presence_of_element_located((By.XPATH, "//tr[@class='ImpactDetailsTable__TableRow-sc-y0nk0g-5 kRGomT']"))
-    )#wait for the rows to load 
-    
-    #manually inspecting the element after the table button clicked
-    #commented out to check the code above
-    #next step clicking download button
-    download = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
-    download.click()
-    
-    #clicking download excel file
-    element = WebDriverWait(driver,3).until(
-        EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
-    )
+    try:
+        element = WebDriverWait(driver,10).until(
+            EC.presence_of_element_located((By.XPATH, "//tr[@class='ImpactDetailsTable__TableRow-sc-y0nk0g-5 kRGomT']"))
+        )#wait for the rows to load 
+        print("\n---Located Table rows---\n")
+        
+        #manually inspecting the element after the table button clicked
+        #commented out to check the code above
+        #next step clix
+        #clicking download excel file
+        element = WebDriverWait(driver,3).until(
+            EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
+        )
+        download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
+        download_button.click()
+        print("\n---Download button clicked ---\n")
+    except Exception as e:
+        print(f"Error: {e}") 
+        print("Error on locating the table rows")
+           
+    time.sleep(2) #applying delay for the button interaction   
     download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
     download_excel.click()
+    print("\n---Download excel file clicked ---\n")
     
     print("\n-----Scrapping Done-----")
         
@@ -221,6 +238,6 @@ except Exception as e:
     logging.error(f"Error in login found: {e}")
     print(driver.page_source)
 finally:
-    time.sleep(60)
+    time.sleep(10)
     driver.quit()
     
