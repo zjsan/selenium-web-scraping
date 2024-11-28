@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import os
 
-directory = r'C:\Users\YourName\Documents\SDG Datas\Scraping'
+directory = r'C:\Users\User\Documents\SDG Datas\Scraping'
 
 # List all Excel files in the directory
 excel_files = [f for f in os.listdir(directory) if f.endswith('.xlsx')]
