@@ -198,7 +198,7 @@ try:
 
     # Final processing or merging (if needed)
     # Directory where files are saved
-    directory = r'Documents/SDG Datas/Scraping'
+    directory = r'C:\Users\YourName\Documents\SDG Datas\Scraping'
 
     # List all Excel files in the directory
     excel_files = [f for f in os.listdir(directory) if f.endswith('.xlsx')]
