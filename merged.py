@@ -5,22 +5,27 @@ import pandas as pd
 import numpy as np
 import os
 
-directory = r'C:\Users\User\Documents\SDG Datas\Scraping'
+try: 
 
-# List all Excel files in the directory
-excel_files = [f for f in os.listdir(directory) if f.endswith('.xlsx')]
+    directory = r'C:\Users\User\Documents\SDG Datas\Scraping'
 
-# Initialize an empty DataFrame
-merged_data = pd.DataFrame()
+    # List all Excel files in the directory
+    excel_files = [f for f in os.listdir(directory) if f.endswith('.xlsx')]
 
-# Loop through each file and append its content
-for file in excel_files:
-    file_path = os.path.join(directory, file)
-    data = pd.read_excel(file_path)
-    merged_data = pd.concat([merged_data, data], ignore_index=True)
+    # Initialize an empty DataFrame
+    merged_data = pd.DataFrame()
 
-# Save the merged file
-merged_file_path = os.path.join(directory, 'Merged_Universities_Data.xlsx')
-merged_data.to_excel(merged_file_path, index=False)
+    # Loop through each file and append its content
+    for file in excel_files:
+        file_path = os.path.join(directory, file)
+        data = pd.read_excel(file_path)
+        merged_data = pd.concat([merged_data, data], ignore_index=True)
 
-print(f"Merged file saved at: {merged_file_path}")
+    # Save the merged file
+    merged_file_path = os.path.join(directory, 'Merged_Universities_Data.xlsx')
+    merged_data.to_excel(merged_file_path, index=False)
+
+    print(f"Merged file saved at: {merged_file_path}")
+except Exception as e:
+    print(f"Error: {e}\n")
+    print("----Excel files can't be merged----")
