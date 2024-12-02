@@ -90,16 +90,31 @@ try:
        #next_button = driver.find_element(By.XPATH,"//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']")
        
        for links in range(links_length):
-           next_button = driver.find_element(By.XPATH,"//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']")
-           next_button.click()
-           time.sleep(0.5)
-           element = WebDriverWait(driver, 7).until(
+           
+           #if successful redirect
+           # Wait for the iframe to be present
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
+
+            # Switch to the iframe
+            driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']"))
+
+            element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//div[@class='Header__DownloadSectionWrapper-sc-7l4zmc-1 eSouWg']/p"))#find this element in the web page
+            )
+            print(element.text)
+            print("------page redirect success------")
+           
+            next_button = driver.find_element(By.XPATH,"//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']")
+            next_button.click()
+            time.sleep(0.5)
+            element = WebDriverWait(driver, 7).until(
             EC.presence_of_element_located((By.XPATH, "//div[@class ='SDGSummaryBox__TitleRow-sc-10fjqkm-3 cDTWWf']//h1"))#find this element in the web page
             )
-           SDG_title = driver.find_element(By.XPATH, "//div[@class ='SDGSummaryBox__TitleRow-sc-10fjqkm-3 cDTWWf']//h1")
-           print("Page is : ", SDG_title.text)
-           links_click += 1
-           print(links_click)
+            SDG_title = driver.find_element(By.XPATH, "//div[@class ='SDGSummaryBox__TitleRow-sc-10fjqkm-3 cDTWWf']//h1")
+            print("Page is : ", SDG_title.text)
+            links_click += 1
+            print(links_click)
+            print("\n")
            
     except Exception as e:
         print(f"Error: {e}")
