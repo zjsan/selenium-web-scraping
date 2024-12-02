@@ -37,7 +37,8 @@ try:
                 print(f"Reading sheet: {sheet} from file: {file}")
                 data = pd.read_excel(file_path, sheet_name=sheet)
                 sheet_data[sheet] = pd.concat([sheet_data[sheet], data], ignore_index=True)
-
+        print("\n")
+        
     # Save the data to a single Excel file with individual sheets
     merged_file_path = os.path.join(directory, 'Merged_Universities_Data3.xlsx')
     with pd.ExcelWriter(merged_file_path, engine='openpyxl') as writer:
