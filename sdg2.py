@@ -78,31 +78,6 @@ try:
       
     except TimeoutException:
       logging.error("Sidebar button not clickable.")
-      
-    #time.sleep(3)
-    # try:
-    #     #if successful redirect
-    #     # Wait for the iframe to be present
-    #     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
-
-    #     # Switch to the iframe
-    #     driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']"))
-
-    #     element = WebDriverWait(driver, 10).until(
-    #         EC.presence_of_element_located((By.XPATH, "//div[@class='Header__DownloadSectionWrapper-sc-7l4zmc-1 eSouWg']/p"))#find this element in the web page
-    #     )
-    #     print(element.text)
-    #     print("------page redirect success------")
-    # except TimeoutException:
-    #     print("Iframe not found https://www.timeshighereducation.com/datapoints/sdg/details/1. Check if redirection worked.")
-        
-    # time.sleep(3)
-   
-    # sdg1 = "No Poverty" 
-    # sdg1_page_title = driver.find_element(By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']") 
-    
-    # if sdg1 == sdg1_page_title.text:
-    #         print(sdg1_page_title.text)        
                  
     try:
    
