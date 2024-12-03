@@ -31,7 +31,6 @@ username = "jpacang@mmsu.edu.ph"
 password = "awanpasswordna"
 
 wait = WebDriverWait(driver, 10)
-
 try:
     
     #putting login credentials in the authentication form
@@ -44,7 +43,7 @@ try:
     el.send_keys(password)  # Enter password
 
     el = wait.until(EC.element_to_be_clickable((By.ID, "kc-login")))
-    time.sleep(4)
+    time.sleep(3)
     el.click()
 
     print("Waiting for the profile icon or similar element to confirm login...")
@@ -55,7 +54,7 @@ try:
     time.sleep(7)
     #navigating through the page and finding an element
     try:
-        element = WebDriverWait(driver, 10).until(
+        element = WebDriverWait(driver, 13).until(
             EC.presence_of_element_located((By.XPATH, "//p[@class='chakra-text css-1qawl6f']"))
         )
         print("\n\n",element.text)
@@ -66,10 +65,10 @@ try:
     
     #clicking the sdg impact button
     try:
-      click_side_bar = WebDriverWait(driver, 10).until(
+      click_side_bar = WebDriverWait(driver, 11).until(
           EC.element_to_be_clickable((By.XPATH, "//button[@class='chakra-button css-1udhqck']"))
       )
-      time.sleep(5)
+      time.sleep(6)
       click_side_bar.click()
       print("side_bar button clicked sucessfully")
       
@@ -84,12 +83,12 @@ try:
     #if successful redirect
     try:
         # Wait for the iframe to be present
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
+        WebDriverWait(driver, 11).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
 
         # Switch to the iframe
         driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']"))
 
-        element = WebDriverWait(driver, 10).until(
+        element = WebDriverWait(driver, 11).until(
             EC.presence_of_element_located((By.XPATH, "//div[@class='Header__DownloadSectionWrapper-sc-7l4zmc-1 eSouWg']/p"))#find this element in the web page
         )
         print(element.text)
