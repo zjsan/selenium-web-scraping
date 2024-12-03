@@ -38,6 +38,7 @@ try:
     el.send_keys(password)  # Enter password
 
     el = wait.until(EC.element_to_be_clickable((By.ID, "kc-login")))
+    time.sleep(0.5)
     el.click()
 
     print("Waiting for the profile icon or similar element to confirm login...")
@@ -45,12 +46,15 @@ try:
     print(driver.title)#check for successful login
     print("Login successful!")
     
+    time.sleep(1)
     #navigating through the page and finding an element
-    element = WebDriverWait(driver, 10).until(
-          EC.presence_of_element_located((By.XPATH, "//p[@class='chakra-text css-1qawl6f']"))
-      )
-    print("\n\n",element.text)
-    
+    try:
+        element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//p[@class='chakra-text css-1qawl6f']"))
+        )
+        print("\n\n",element.text)
+    except TimeoutException:
+        print("Error in the landing page after login.")    
      #-----Navigating the UI to redirect to the desired page: https://www.timeshighereducation.com/datapoints/sdg/details/1-------
     
     #clicking the sdg impact button
@@ -69,20 +73,24 @@ try:
     except TimeoutException:
       logging.error("Sidebar button not clickable.")
 
-    #if successful redirect
-    # Wait for the iframe to be present
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
+    try:
+        #if successful redirect
+        # Wait for the iframe to be present
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
 
-    # Switch to the iframe
-    driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']"))
+        # Switch to the iframe
+        driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']"))
 
-    element = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//div[@class='Header__DownloadSectionWrapper-sc-7l4zmc-1 eSouWg']/p"))#find this element in the web page
-    )
-    print(element.text)
-    print("------page redirect success------")
+        element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//div[@class='Header__DownloadSectionWrapper-sc-7l4zmc-1 eSouWg']/p"))#find this element in the web page
+        )
+        print(element.text)
+        print("------page redirect success------")
+    except TimeoutException:
+        print("Iframe not found https://www.timeshighereducation.com/datapoints/sdg/details/1. Check if redirection worked.")
+        
     time.sleep(2)
-
+   
     sdg1 = "No Poverty"
     page_title = driver.find_element(By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']") 
                   
@@ -274,7 +282,7 @@ try:
 
 except Exception as e:
     logging.error(f"Error in login found: {e}")
-    print(driver.page_source)
+    #print(driver.page_source)
 finally:
     time.sleep(10)
     driver.quit()
