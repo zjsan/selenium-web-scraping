@@ -185,7 +185,7 @@ try:
             except TimeoutException:
                 print("Error in scraping the data. Exiting loop.")
                 break
-            
+                
             # Attempt to click the "Next" button
             time.sleep(2)
             try:
