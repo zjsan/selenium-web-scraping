@@ -8,6 +8,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.chrome.options import Options
 
 import logging
 import time 
@@ -15,9 +16,13 @@ import pandas as pd
 import numpy as np
 import os
 
+# Set up Chrome options
+chrome_options = Options()
+chrome_options.add_argument("--incognito")
+chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Helps bypass detection
 
 service = Service(executable_path = "chromedriver.exe")
-driver = webdriver.Chrome(service=service)
+driver = webdriver.Chrome(service=service,options=chrome_options)
 
 
 # Login credentials
@@ -93,7 +98,7 @@ try:
         
     time.sleep(2)
    
-    sdg1 = "No Poverty"
+    sdg1 = "No Poverty" 
     sdg1_page_title = driver.find_element(By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']") 
     
     if sdg1 == sdg1_page_title.text:
