@@ -15,6 +15,7 @@ import time
 import pandas as pd
 import numpy as np
 import os
+import sys
 
 # Set up Chrome options
 chrome_options = Options()
@@ -50,7 +51,7 @@ try:
     driver.get("https://www.timeshighereducation.com/datapoints/")
     print(driver.title)#check for successful login
     print("Login successful!")
-    
+      
     time.sleep(7)
     #navigating through the page and finding an element
     try:
@@ -60,6 +61,7 @@ try:
         print("\n\n",element.text)
     except TimeoutException:
         print("Error in the landing page after login.")    
+        
      #-----Navigating the UI to redirect to the desired page: https://www.timeshighereducation.com/datapoints/sdg/details/1-------
     
     #clicking the sdg impact button
@@ -78,6 +80,26 @@ try:
       
     except TimeoutException:
       logging.error("Sidebar button not clickable.")
+      
+    #if successful redirect
+    try:
+        # Wait for the iframe to be present
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
+
+        # Switch to the iframe
+        driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']"))
+
+        element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//div[@class='Header__DownloadSectionWrapper-sc-7l4zmc-1 eSouWg']/p"))#find this element in the web page
+        )
+        print(element.text)
+        print("------page redirect success------")
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        print("Error in the landing page")
+        print("Exiting the program")
+        sys.exit()
                  
     try:
    
@@ -123,12 +145,46 @@ try:
                 print(page_title.text)
                 print("\n------Page redirect success------")
                 
-                #function call on this part 
             except TimeoutException:
                 print("Desired element not found on this page.")
                 break
             
             #-----Scraping Logic Here----
+            try: 
+                time.sleep(2)
+                #-------Scraping Logic-------       
+                #interacting with the selecting region and country section of the page
+                element = WebDriverWait(driver, 5).until(
+                    EC.presence_of_element_located((By.XPATH, "//div[@class = 'PeerSelectWrapper__Wrapper-sc-brqol7-1 kACRoa']"))
+                )
+                #entering input in the country/region selection
+                try:
+                    country_name = "Philippines"
+                    element = WebDriverWait(driver,10).until(
+                        EC.presence_of_element_located((By.XPATH, "//div[@class = 'LocationSearch__Container-sc-1dp07t6-0 dhVVKS']"))
+                    )
+                    print("found element in the country selection")
+                    country_input = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
+                    driver.find_element(By.XPATH, "//div[@role='combobox']").__setattr__("aria-expanded","true")#set combo box value to true to see list of regions/countriess
+                    print("----typing country name-----")
+                    
+                    #individually type the country name in the input field
+                    for char in country_name:
+                        country_input.send_keys(char)   
+                        time.sleep(0.3)
+
+                        if char == "s":
+                            country_input.send_keys(Keys.ARROW_DOWN)
+                            country_input.send_keys(Keys.ENTER)
+                    print("-----Sucessfully selected region/country------")
+                    
+                except Exception as e:
+                    print(f"Error: {e}")
+                    print("Can't select country")
+                    
+            except TimeoutException:
+                print("Error in scraping the data. Exiting loop.")
+                break
             
             # Attempt to click the "Next" button
             time.sleep(2)
