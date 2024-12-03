@@ -43,7 +43,7 @@ try:
     el.send_keys(password)  # Enter password
 
     el = wait.until(EC.element_to_be_clickable((By.ID, "kc-login")))
-    time.sleep(2)
+    time.sleep(3)
     el.click()
 
     print("Waiting for the profile icon or similar element to confirm login...")
@@ -51,7 +51,7 @@ try:
     print(driver.title)#check for successful login
     print("Login successful!")
     
-    time.sleep(3)
+    time.sleep(4)
     #navigating through the page and finding an element
     try:
         element = WebDriverWait(driver, 10).until(
@@ -67,7 +67,7 @@ try:
       click_side_bar = WebDriverWait(driver, 10).until(
           EC.element_to_be_clickable((By.XPATH, "//button[@class='chakra-button css-1udhqck']"))
       )
-      time.sleep(1)
+      time.sleep(4)
       click_side_bar.click()
       print("side_bar button clicked sucessfully")
       
@@ -79,7 +79,7 @@ try:
     except TimeoutException:
       logging.error("Sidebar button not clickable.")
 
-    time.sleep(2)
+    time.sleep(3)
     try:
         #if successful redirect
         # Wait for the iframe to be present
@@ -96,7 +96,7 @@ try:
     except TimeoutException:
         print("Iframe not found https://www.timeshighereducation.com/datapoints/sdg/details/1. Check if redirection worked.")
         
-    time.sleep(2)
+    time.sleep(3)
    
     sdg1 = "No Poverty" 
     sdg1_page_title = driver.find_element(By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']") 
