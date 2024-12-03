@@ -38,7 +38,7 @@ try:
     el.send_keys(password)  # Enter password
 
     el = wait.until(EC.element_to_be_clickable((By.ID, "kc-login")))
-    time.sleep(0.5)
+    time.sleep(2)
     el.click()
 
     print("Waiting for the profile icon or similar element to confirm login...")
@@ -46,7 +46,7 @@ try:
     print(driver.title)#check for successful login
     print("Login successful!")
     
-    time.sleep(1)
+    time.sleep(3)
     #navigating through the page and finding an element
     try:
         element = WebDriverWait(driver, 10).until(
@@ -62,6 +62,7 @@ try:
       click_side_bar = WebDriverWait(driver, 10).until(
           EC.element_to_be_clickable((By.XPATH, "//button[@class='chakra-button css-1udhqck']"))
       )
+      time.sleep(1)
       click_side_bar.click()
       print("side_bar button clicked sucessfully")
       
@@ -73,6 +74,7 @@ try:
     except TimeoutException:
       logging.error("Sidebar button not clickable.")
 
+    time.sleep(2)
     try:
         #if successful redirect
         # Wait for the iframe to be present
@@ -92,75 +94,81 @@ try:
     time.sleep(2)
    
     sdg1 = "No Poverty"
-    page_title = driver.find_element(By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']") 
-                  
-    try:
+    sdg1_page_title = driver.find_element(By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']") 
+    
+    if sdg1 == sdg1_page_title.text:
+            print(sdg1_page_title.text)        
+                 
+    # try:
    
-        links_click = 0#clicked counter
-        links_length = 17#number for the remaining sdg link redirection
+    #     links_click = 0#clicked counter
+    #     links_length = 17#number for the remaining sdg link redirection
 
-        #main loop for page redirection
-        for i in range(links_length):
+    #     #main loop for page redirection
+    #     for i in range(links_length):
             
-            time.sleep(2)
-            if sdg1 == page_title.text:
-                print(page_title.text)
+    #         time.sleep(2)
+    #         if sdg1 == sdg1_page_title.text:
+    #             print(sdg1_page_title.text)
+    #             break
+    #             #process to web scrap logic
                 
-                #process to web scrap logic
-            else:
-                # Attempt to click the "Next" button
-                time.sleep(2)
-                try:
-                    next_button = WebDriverWait(driver, 10).until(
-                        EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
-                    )
-                    next_button.click()
-                    links_click += 1
-                    print(f"Clicked Next button {links_click} times")
-                except TimeoutException:
-                    print("Next button not found or not clickable. Exiting loop.")
-                    break
+    #         else:
+    #             # Attempt to click the "Next" button
+    #             time.sleep(2)
+    #             try:
+    #                 next_button = WebDriverWait(driver, 10).until(
+    #                     EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
+    #                 )
+    #                 next_button.click()
+    #                 links_click += 1
+    #                 print(f"Clicked Next button {links_click} times")
+    #             except TimeoutException:
+    #                 print("Next button not found or not clickable. Exiting loop.")
+    #                 break
                 
-                #leave frame
-                driver.switch_to.default_content()
-                time.sleep(3)
-                # Wait for the iframe to load - new page
-                try:
-                    time.sleep(3)
-                    WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
-                except TimeoutException:
-                    print("Iframe not found after clicking Next. Check if redirection worked.")
-                    break
+    #             driver.switch_to.default_content() #leave frame
+    #             time.sleep(3)
+    #             # Wait for the iframe to load - new page
+    #             try:
+    #                 time.sleep(3)
+    #                 WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
+    #             except TimeoutException:
+    #                 print("Iframe not found after clicking Next. Check if redirection worked.")
+    #                 break
 
-                # Switch to the iframe
-                try:
-                    iframe = driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']")
-                    driver.switch_to.frame(iframe)
-                except TimeoutException:
-                    print("Iframe not found on this page. Skipping...")
-                    break
+    #             # Switch to the iframe
+    #             try:
+    #                 iframe = driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']")
+    #                 driver.switch_to.frame(iframe)
+    #             except TimeoutException:
+    #                 print("Iframe not found on this page. Skipping...")
+    #                 break
 
-                # Wait for and print the desired element
-                try:
-                    page_title = driver.find_element(By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']")
-                    print(page_title.text)
+    #             # Wait for and print the desired element
+    #             try:
+    #                 element = WebDriverWait(driver, 10).until(
+    #                     EC.presence_of_element_located((By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']"))
+    #                 )
+    #                 page_title = driver.find_element(By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']")
+    #                 print(page_title.text)
                     
-                    element = WebDriverWait(driver, 15).until(
-                        EC.presence_of_element_located((By.XPATH, "//div[@class='Header__DownloadSectionWrapper-sc-7l4zmc-1 eSouWg']/p"))
-                    )
-                    print(element.text)
-                    page_title = driver.find_element(By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']") 
-                    print(page_title.text)
-                    print("\n------Page redirect success------")
+    #                 element = WebDriverWait(driver, 15).until(
+    #                     EC.presence_of_element_located((By.XPATH, "//div[@class='Header__DownloadSectionWrapper-sc-7l4zmc-1 eSouWg']/p"))
+    #                 )
+    #                 print(element.text)
+    #                 page_title = driver.find_element(By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']") 
+    #                 print(page_title.text)
+    #                 print("\n------Page redirect success------")
                     
-                    #function call on this part 
-                except TimeoutException:
-                    print("Desired element not found on this page.")
-                    break
+    #                 #function call on this part 
+    #             except TimeoutException:
+    #                 print("Desired element not found on this page.")
+    #                 break
             
         #user defined function for the scraping    
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+    # except Exception as e:
+    #     print(f"An unexpected error occurred: {e}")
     
     #-------Scraping Logic-------       
     # #interacting with the selecting region and country section of the page
