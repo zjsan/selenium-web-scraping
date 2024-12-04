@@ -191,6 +191,9 @@ try:
             time.sleep(3)
             try:
                 print("\n---Finding university container---\n")
+                WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']"))
+                )
                 element = driver.find_element(By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
                 WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']"))
@@ -255,7 +258,7 @@ try:
                 time.sleep(2)
 
                 # Table button
-                time.sleep(1)
+                time.sleep(3)
                 print("---Clicking Table button---\n")
                 table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
                 table_button.click()
