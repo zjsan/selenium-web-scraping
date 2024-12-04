@@ -110,7 +110,7 @@ try:
         #main loop for page redirection
         for i in range(links_length):
             
-            time.sleep(4)  
+            time.sleep(3)  
             driver.switch_to.default_content() #leave frame
             time.sleep(4)
             # Wait for the iframe to load - new page
@@ -131,7 +131,7 @@ try:
             
             # Wait for and print the desired element
             try:
-                element = WebDriverWait(driver, 10).until(
+                element = WebDriverWait(driver, 15).until(
                     EC.presence_of_element_located((By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']"))
                 )
                 page_title = driver.find_element(By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']")
@@ -173,7 +173,7 @@ try:
                     #individually type the country name in the input field
                     for char in country_name:
                         country_input.send_keys(char)   
-                        time.sleep(0.3)
+                        time.sleep(0.2)
 
                         if char == "s":
                             country_input.send_keys(Keys.ARROW_DOWN)
