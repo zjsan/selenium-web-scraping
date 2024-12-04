@@ -183,88 +183,84 @@ try:
                 except Exception as e:
                     print(f"Error: {e}")
                     print("Can't select country")
+                
+                # Step 2: Selecting the container for the list of universities
+                time.sleep(3)
+                try:
+                    print("\n---Finding university container---\n")
+                    WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']"))
+                    )
+                    element = driver.find_element(By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
+                    WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']"))
+                    )
+                    WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
+                    )
+                    print("\nFound universities container\n")
+                except Exception as e:
+                    raise RuntimeError("Failed to locate university container or list") from e
+                
+                # Step 3: Selecting all university buttons
+                time.sleep(2)
+                try:
+                    university_name_buttons = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
+                    university_length = len(university_name_buttons)
+                    print(f"Total universities found: {university_length}")
+                except Exception as e:
+                    raise RuntimeError("Failed to retrieve university buttons") from e
+                
+                # Step 4: Process universities in batches (Batch Processing Logic)
+                time.sleep(3)
+                batch_size = 35  # Number of universities to process per batch
+                click_count = 0  # Counter for clicks
+
+                for batch_start in range(0, university_length, batch_size):
+                    # Reset selections if not the first batch
+                    try:
+                        if batch_start > 0:
+                            try:
+                                reset_button = driver.find_element(By.XPATH, "//button[text()='Reset benchmark']")
+                                reset_button.click()
+                                time.sleep(2)  # Allow time for reset
+                                print("Selections reset for the next batch")
+                            except Exception as e:
+                                print("No reset button found or reset failed:", e)
+
+                        # Select universities in the current batch
+                        for index in range(batch_start, min(batch_start + batch_size, university_length)):
+                            try:
+                                university_name_buttons[index].click()
+                                click_count += 1
+                                print(f"Selected: {university_name_buttons[index].text}")
+                                time.sleep(0.4)  # Pause for UI responsiveness
+                            except Exception as e:
+                                print(f"Error clicking university button at index {index}: {e}")
+                                print("Existing the loop")
+                                break
+                                 
+                        # Step 5: Apply selections and download data
+                        try:
+                            time.sleep(3)
+                            # Apply button
+                            print("\n---Clicking Apply button---\n")
+                            apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
+                            apply_button.click()
+                            time.sleep(2)
+                            
+                        except Exception as e:
+                            print(f"An unexpected error occurred in clicking apply button : {e}") 
+                            
+                    except Exception as e:
+                        raise RuntimeError("Failed to process universities in batches") from e
                     
+                    print(f"Batch {batch_start // batch_size + 1} - Selected {click_count} universities")
+
             except TimeoutException:
                 print("Error in scraping the data. Exiting loop.")
                 break
-                
-             # Step 2: Selecting the container for the list of universities
-            time.sleep(3)
-            try:
-                print("\n---Finding university container---\n")
-                WebDriverWait(driver, 10).until(
-                    EC.presence_of_element_located((By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']"))
-                )
-                element = driver.find_element(By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
-                WebDriverWait(driver, 10).until(
-                    EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']"))
-                )
-                WebDriverWait(driver, 10).until(
-                    EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
-                )
-                print("\nFound universities container\n")
-            except Exception as e:
-                raise RuntimeError("Failed to locate university container or list") from e
-            
-             # Step 3: Selecting all university buttons
-            time.sleep(2)
-            try:
-                university_name_buttons = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
-                university_length = len(university_name_buttons)
-                print(f"Total universities found: {university_length}")
-            except Exception as e:
-                raise RuntimeError("Failed to retrieve university buttons") from e
-            
-            # Step 4: Process universities in batches (Batch Processing Logic)
-            time.sleep(3)
-            batch_size = 35  # Number of universities to process per batch
-            click_count = 0  # Counter for clicks
-
-            for batch_start in range(0, university_length, batch_size):
-                # Reset selections if not the first batch
-                try:
-                    if batch_start > 0:
-                        try:
-                            reset_button = driver.find_element(By.XPATH, "//button[text()='Reset benchmark']")
-                            reset_button.click()
-                            time.sleep(2)  # Allow time for reset
-                            print("Selections reset for the next batch")
-                        except Exception as e:
-                            print("No reset button found or reset failed:", e)
-
-                    # Select universities in the current batch
-                    for index in range(batch_start, min(batch_start + batch_size, university_length)):
-                        try:
-                            university_name_buttons[index].click()
-                            click_count += 1
-                            print(f"Selected: {university_name_buttons[index].text}")
-                            time.sleep(0.4)  # Pause for UI responsiveness
-                        except Exception as e:
-                            print(f"Error clicking university button at index {index}: {e}")
-                            print("Existing the loop")
-                            break
-                except Exception as e:
-                     raise RuntimeError("Failed to process universities in batches") from e
-                
-                print(f"Batch {batch_start // batch_size + 1} - Selected {click_count} universities")
-
-            # Step 5: Apply selections and download data
-            try:
-                time.sleep(3)
-                # Apply button
-                print("\n---Clicking Apply button---\n")
-                apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
-                apply_button.click()
-                time.sleep(2)
-
-                # Table button
-                time.sleep(3)
-                print("---Clicking Table button---\n")
-                table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
-                table_button.click()
-                print("Sucess fully clicked apply and table button")
-            except Exception as e:
-                print(f"An unexpected error occurred in applying : {e}")     
+                    
                        
             # Attempt to click the "Next" button
             time.sleep(3)
