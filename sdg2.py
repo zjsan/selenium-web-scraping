@@ -110,9 +110,9 @@ try:
         #main loop for page redirection
         for i in range(links_length):
             
-            time.sleep(3)  
+            time.sleep(4)  
             driver.switch_to.default_content() #leave frame
-            time.sleep(3)
+            time.sleep(4)
             # Wait for the iframe to load - new page
             try:
                 time.sleep(3)
@@ -160,6 +160,7 @@ try:
                 
                 #Step 1: entering input in the country/region selection
                 try:
+                    time.sleep(2)
                     country_name = "Philippines"
                     element = WebDriverWait(driver,10).until(
                         EC.presence_of_element_located((By.XPATH, "//div[@class = 'LocationSearch__Container-sc-1dp07t6-0 dhVVKS']"))
@@ -204,7 +205,6 @@ try:
                 print("\nFound universities container\n")
             except Exception as e:
                 raise RuntimeError("Failed to locate university container or list") from e
-            
             
              # Step 3: Selecting all university buttons
             time.sleep(2)
@@ -262,6 +262,7 @@ try:
                 print("---Clicking Table button---\n")
                 table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
                 table_button.click()
+                print("Sucess fully clicked apply and table button")
             except Exception as e:
                 print(f"An unexpected error occurred in applying : {e}")     
                        
