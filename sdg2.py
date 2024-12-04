@@ -211,6 +211,34 @@ try:
             except Exception as e:
                 raise RuntimeError("Failed to retrieve university buttons") from e
             
+            # Step 4: Process universities in batches (Batch Processing Logic)
+            time.sleep(3)
+            batch_size = 35  # Number of universities to process per batch
+            click_count = 0  # Counter for clicks
+
+            for batch_start in range(0, university_length, batch_size):
+                # Reset selections if not the first batch
+                if batch_start > 0:
+                    try:
+                        reset_button = driver.find_element(By.XPATH, "//button[text()='Reset benchmark']")
+                        reset_button.click()
+                        time.sleep(2)  # Allow time for reset
+                        print("Selections reset for the next batch")
+                    except Exception as e:
+                        print("No reset button found or reset failed:", e)
+
+                # Select universities in the current batch
+                for index in range(batch_start, min(batch_start + batch_size, university_length)):
+                    try:
+                        university_name_buttons[index].click()
+                        click_count += 1
+                        print(f"Selected: {university_name_buttons[index].text}")
+                        time.sleep(0.4)  # Pause for UI responsiveness
+                    except Exception as e:
+                        print(f"Error clicking university button at index {index}: {e}")
+
+                print(f"Batch {batch_start // batch_size + 1} - Selected {click_count} universities")
+            
             # Attempt to click the "Next" button
             time.sleep(2)
             try:
