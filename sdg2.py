@@ -150,13 +150,14 @@ try:
             
             #-----Scraping Logic Here----
             try: 
-                time.sleep(2)
+                time.sleep(3)   
                 #-------Scraping Logic-------       
                 #interacting with the selecting region and country section of the page
                 element = WebDriverWait(driver, 5).until(
                     EC.presence_of_element_located((By.XPATH, "//div[@class = 'PeerSelectWrapper__Wrapper-sc-brqol7-1 kACRoa']"))
                 )
-                #entering input in the country/region selection
+                
+                #Step 1: entering input in the country/region selection
                 try:
                     country_name = "Philippines"
                     element = WebDriverWait(driver,10).until(
@@ -185,6 +186,31 @@ try:
                 print("Error in scraping the data. Exiting loop.")
                 break
                 
+             # Step 2: Selecting the container for the list of universities
+            time.sleep(2)
+            try:
+                print("\n---Finding university container---\n")
+                element = driver.find_element(By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
+                WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']"))
+                )
+                WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
+                )
+                print("\nFound universities container\n")
+            except Exception as e:
+                raise RuntimeError("Failed to locate university container or list") from e
+            
+            
+             # Step 3: Selecting all university buttons
+            time.sleep(2)
+            try:
+                university_name_buttons = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
+                university_length = len(university_name_buttons)
+                print(f"Total universities found: {university_length}")
+            except Exception as e:
+                raise RuntimeError("Failed to retrieve university buttons") from e
+            
             # Attempt to click the "Next" button
             time.sleep(2)
             try:
