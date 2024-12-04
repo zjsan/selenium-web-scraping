@@ -204,6 +204,7 @@ try:
                             EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
                         )
                         print("\nFound universities container\n")
+                        driver.execute_script("window.stop();")  # Stops current page loading
                         break  # Exit loop if successful
                     except  Exception as e:
                         attempt += 1
