@@ -214,6 +214,9 @@ try:
                 # Step 3: Selecting all university buttons
                 time.sleep(2)
                 try:
+                    element = WebDriverWait(driver, 15).until(
+                            EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button"))
+                        )
                     university_name_buttons = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
                     university_length = len(university_name_buttons)
                     print(f"Total universities found: {university_length}")
@@ -247,7 +250,7 @@ try:
                                 time.sleep(0.2)  # Pause for UI responsiveness
                             except Exception as e:
                                 print(f"Error clicking university button at index {index}: {e}")
-                                print("Existing the loop")
+                                print("Exiting the loop")
                                 break
                                  
                         # Step 5: Apply selections and download data
