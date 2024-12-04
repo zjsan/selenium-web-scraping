@@ -240,7 +240,7 @@ try:
                 print(f"Batch {batch_start // batch_size + 1} - Selected {click_count} universities")
             
             # Attempt to click the "Next" button
-            time.sleep(2)
+            time.sleep(3)
             try:
                 next_button = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
