@@ -227,6 +227,7 @@ try:
 
                 for batch_start in range(0, university_length, batch_size):
                     # Reset selections if not the first batch
+                    time.sleep(1)
                     try:
                         if batch_start > 0:
                             try:
@@ -254,13 +255,14 @@ try:
                             time.sleep(3)
                             # Apply button
                             print("\n---Clicking Apply button---\n")
-                            element = WebDriverWait(driver, 10).until(
+                            element = WebDriverWait(driver, 15).until(
                             EC.presence_of_element_located((By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']"))
                             )
                             apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
                             apply_button.click()
                             time.sleep(2)
                             print("Successfully clicked apply button")
+                            
                         except Exception as e:
                             print(f"An unexpected error occurred in clicking apply button : {e}") 
                             
