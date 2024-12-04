@@ -76,9 +76,11 @@ try:
       click_details_link = driver.find_element(By.XPATH, "//ul[@class='css-1ngfogx']/li[2]/a") #finding this elements
       click_details_link.click()
       print("redirecting to https://www.timeshighereducation.com/datapoints/sdg/details/1")
-      
+
     except TimeoutException:
       logging.error("Sidebar button not clickable.")
+      print("Exiting the program")
+      sys.exit()        
       
     #if successful redirect
     try:
@@ -108,8 +110,7 @@ try:
         #main loop for page redirection
         for i in range(links_length):
             
-            time.sleep(3)
-                
+            time.sleep(3)  
             driver.switch_to.default_content() #leave frame
             time.sleep(3)
             # Wait for the iframe to load - new page
@@ -187,7 +188,7 @@ try:
                 break
                 
              # Step 2: Selecting the container for the list of universities
-            time.sleep(2)
+            time.sleep(3)
             try:
                 print("\n---Finding university container---\n")
                 element = driver.find_element(By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
@@ -244,6 +245,23 @@ try:
                 
                 print(f"Batch {batch_start // batch_size + 1} - Selected {click_count} universities")
 
+            # Step 5: Apply selections and download data
+            try:
+                time.sleep(3)
+                # Apply button
+                print("\n---Clicking Apply button---\n")
+                apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
+                apply_button.click()
+                time.sleep(2)
+
+                # Table button
+                time.sleep(1)
+                print("---Clicking Table button---\n")
+                table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
+                table_button.click()
+            except Exception as e:
+                print(f"An unexpected error occurred in applying : {e}")     
+                       
             # Attempt to click the "Next" button
             time.sleep(3)
             try:
@@ -257,6 +275,7 @@ try:
             except TimeoutException:
                 print("Next button not found or not clickable. Exiting loop.")
                 break
+                
             
         print("\n Sucessfully navigated all webpages")        
     # user defined function for the scraping    
@@ -264,80 +283,6 @@ try:
         print(f"An unexpected error occurred: {e}")
     
     #-------Scraping Logic-------       
-    # #interacting with the selecting region and country section of the page
-    # element = WebDriverWait(driver, 5).until(
-    #     EC.presence_of_element_located((By.XPATH, "//div[@class = 'PeerSelectWrapper__Wrapper-sc-brqol7-1 kACRoa']"))
-    # )
-    
-    # #entering input in the country/region selection
-    # try:
-    #     country_name = "Philippines"
-    #     element = WebDriverWait(driver,10).until(
-    #         EC.presence_of_element_located((By.XPATH, "//div[@class = 'LocationSearch__Container-sc-1dp07t6-0 dhVVKS']"))
-    #     )
-    #     print("found element in the country selection")
-    #     country_input = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
-    #     driver.find_element(By.XPATH, "//div[@role='combobox']").__setattr__("aria-expanded","true")#set combo box value to true to see list of regions/countriess
-    #     print("----typing country name-----")
-        
-    #     #individually type the country name in the input field
-    #     #hope it will work this time kase pagod na ako putanginaaaaaaaaaaa
-    #     for char in country_name:
-    #         country_input.send_keys(char)   
-    #         time.sleep(0.3)
-
-    #         if char == "s":
-    #             country_input.send_keys(Keys.ARROW_DOWN)
-    #             country_input.send_keys(Keys.ENTER)
-    #     print("-----Sucessfully selected region/country------")
-          
-    # except Exception as e:
-    #     print(f"Error: {e}")
-    #     print("Can't select country")
-
-    # # Selecting elements from universities
-    # try:
-    #     # Selecting the container for the list of universities
-    #     element = driver.find_element(By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
-    #     WebDriverWait(driver, 10).until(
-    #         EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']"))
-    #     )
-    #     WebDriverWait(driver, 10).until(
-    #         EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
-    #     )
-    #     print("\nFound universities\n")
-
-    #     # Select all university buttons
-    #     university_name_buttons = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
-    #     university_length = len(university_name_buttons)
-    #     print(f"Total universities found: {university_length}")
-
-    #     batch_size = 35  # Number of universities to process per batch
-    #     click_count = 0  # Counter for clicks
-
-    #     # Process universities in batches
-    #     for batch_start in range(0, university_length, batch_size):
-    #         # Reset selections if not the first batch
-    #         if batch_start > 0:
-    #             try:
-    #                 reset_button = driver.find_element(By.XPATH, "//button[text()='Reset benchmark']")
-    #                 reset_button.click()
-    #                 time.sleep(2)  # Allow time for reset
-    #                 print("Selections reset for the next batch")
-    #             except Exception as e:
-    #                 print("No reset button found or reset failed")
-
-    #         # Select universities in the current batch
-    #         for index in range(batch_start, min(batch_start + batch_size, university_length)):
-    #             try:
-    #                 university_name_buttons[index].click()
-    #                 click_count += 1
-    #                 print(f"Selected: {university_name_buttons[index].text}")
-    #                 time.sleep(0.3)  # Pause for UI responsiveness
-    #             except Exception as e:
-    #                 print(f"Error clicking university button at index {index}: {e}")
-
-    #         print(f"Batch {batch_start // batch_size + 1} - Selected {click_count} universities")
 
     #         # Apply selections
     #         try:
@@ -385,6 +330,6 @@ except Exception as e:
     logging.error(f"Error in login found: {e}")
     #print(driver.page_source)
 finally:
-    time.sleep(10)
+    time.sleep(15)
     driver.quit()
     
