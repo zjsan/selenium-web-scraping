@@ -151,10 +151,10 @@ try:
             
             #-----Scraping Logic Here----
             try: 
-                time.sleep(3)   
+                time.sleep(2)   
                 #-------Scraping Logic-------       
                 #interacting with the selecting region and country section of the page
-                element = WebDriverWait(driver, 5).until(
+                element = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.XPATH, "//div[@class = 'PeerSelectWrapper__Wrapper-sc-brqol7-1 kACRoa']"))
                 )
                 
@@ -186,21 +186,30 @@ try:
                 
                 # Step 2: Selecting the container for the list of universities
                 time.sleep(3)
-                try:
-                    print("\n---Finding university container---\n")
-                    WebDriverWait(driver, 10).until(
-                        EC.presence_of_element_located((By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']"))
-                    )
-                    element = driver.find_element(By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
-                    WebDriverWait(driver, 10).until(
-                        EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']"))
-                    )
-                    WebDriverWait(driver, 10).until(
-                        EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
-                    )
-                    print("\nFound universities container\n")
-                except Exception as e:
-                    raise RuntimeError("Failed to locate university container or list") from e
+                
+                #for unexpected page refresh
+                max_retries = 3
+                attempt = 0
+                while attempt < max_retries:
+                    try:
+                        print("\n---Finding university container---\n")
+                        WebDriverWait(driver, 15).until(
+                            EC.presence_of_element_located((By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']"))
+                        )
+                        element = driver.find_element(By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
+                        WebDriverWait(driver, 15).until(
+                            EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']"))
+                        )
+                        WebDriverWait(driver, 10).until(
+                            EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
+                        )
+                        print("\nFound universities container\n")
+                        break  # Exit loop if successful
+                    except  Exception as e:
+                        attempt += 1
+                        print(f"Page refresh detected. Retrying... ({attempt}/{max_retries})")
+                    except Exception as e:
+                        raise RuntimeError("Failed to locate university container or list") from e
                 
                 # Step 3: Selecting all university buttons
                 time.sleep(2)
@@ -234,7 +243,7 @@ try:
                                 university_name_buttons[index].click()
                                 click_count += 1
                                 print(f"Selected: {university_name_buttons[index].text}")
-                                time.sleep(0.4)  # Pause for UI responsiveness
+                                time.sleep(0.2)  # Pause for UI responsiveness
                             except Exception as e:
                                 print(f"Error clicking university button at index {index}: {e}")
                                 print("Existing the loop")
@@ -260,8 +269,7 @@ try:
             except TimeoutException:
                 print("Error in scraping the data. Exiting loop.")
                 break
-                    
-                       
+                           
             # Attempt to click the "Next" button
             time.sleep(3)
             try:
@@ -276,7 +284,6 @@ try:
                 print("Next button not found or not clickable. Exiting loop.")
                 break
                 
-            
         print("\n Sucessfully navigated all webpages")        
     # user defined function for the scraping    
     except Exception as e:
