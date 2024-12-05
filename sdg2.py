@@ -228,7 +228,7 @@ try:
                                 next_button = WebDriverWait(driver, 10).until(
                                     EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
                                 )
-                                time.sleep(0.3)
+                                time.sleep(0.4)
                                 next_button.click()
                                 links_click += 1
                                 print(f"\nClicked Next button {links_click} times")
