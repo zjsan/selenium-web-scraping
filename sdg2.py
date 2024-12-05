@@ -341,6 +341,24 @@ try:
                             print(f"An unexpected error occurred in clicking apply button : {e}") 
                         
                         #---download data here---
+                        # Download the Excel file for the current batch
+                        # try:
+                        #     element = WebDriverWait(driver, 10).until(
+                        #         EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
+                        #     )
+                        #     download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
+                        #     download_button.click()
+                        #     print("\n---Download button clicked---\n")
+
+                        #     WebDriverWait(driver, 10).until(
+                        #         EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
+                        #     )
+                        #     download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
+                        #     download_excel.click()
+                        #     print(f"\n---Batch {batch_start // batch_size + 1} downloaded---\n")
+                        #     time.sleep(5)  # Wait for download completion
+                        # except Exception as e:
+                        #     print(f"Error occurred while downloading excel file: {e}")
                             
                     except Exception as e:
                         raise RuntimeError("Failed to process universities in batches") from e
