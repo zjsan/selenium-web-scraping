@@ -51,7 +51,7 @@ try:
     print(driver.title)#check for successful login
     print("Login successful!")
       
-    time.sleep(7)
+    time.sleep(4)
     #navigating through the page and finding an element
     try:
         element = WebDriverWait(driver, 13).until(
@@ -83,6 +83,7 @@ try:
       sys.exit()        
       
     #if successful redirect
+    #inside page 1 = SDG1
     try:
         # Wait for the iframe to be present
         WebDriverWait(driver, 11).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
@@ -113,22 +114,36 @@ try:
             time.sleep(3)  
             driver.switch_to.default_content() #leave frame
             # Wait for the iframe to load - new page
+            
+            #insert logic for page refresh?
+            #for unexpected page refresh
+            max_retries = 3
+            attempt = 0
+            while attempt < max_retries:
+                try:
+                    time.sleep(3)
+                    element = WebDriverWait(driver, 15).until
+                    (EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
+                    print("---Iframe found---")
+                    print("Proceeding to switch from default view to iframe")
+                    break
+                except TimeoutException:
+                    attempt += 1
+                    print("Iframe not found. Check if redirection worked.")
+                    print(f"Attempting to find Iframe. Retrying... ({attempt}/{max_retries})")
+                except Exception as e:
+                    raise RuntimeError("Failed to locate Iframe") from e
+                    
+            #Switch to the iframe
             try:
-                time.sleep(3)
-                WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
-            except TimeoutException:
-                print("Iframe not found after clicking Next. Check if redirection worked.")
-                break
-
-            # Switch to the iframe
-            try:
+                time.sleep(2)
                 iframe = driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']")
                 driver.switch_to.frame(iframe)
             except TimeoutException:
                 print("Iframe not found on this page. Skipping...")
                 break
-            
-            # Wait for and print the desired element
+                    
+            #Wait for and print the desired element -- to check if page load is sucessfull
             try:
                 element = WebDriverWait(driver, 15).until(
                     EC.presence_of_element_located((By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']"))
@@ -146,6 +161,7 @@ try:
                 
             except TimeoutException:
                 print("Desired element not found on this page.")
+                print("Exiting the program loop")
                 break
             
             #-----Scraping Logic Here----
@@ -383,7 +399,6 @@ try:
 
 except Exception as e:
     logging.error(f"Error in login found: {e}")
-    #print(driver.page_source)
 finally:
     time.sleep(15)
     driver.quit()
