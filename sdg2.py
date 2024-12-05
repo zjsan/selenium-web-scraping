@@ -112,7 +112,6 @@ try:
             
             time.sleep(3)  
             driver.switch_to.default_content() #leave frame
-            time.sleep(4)
             # Wait for the iframe to load - new page
             try:
                 time.sleep(3)
@@ -179,31 +178,48 @@ try:
                         if char == "s":
                             country_input.send_keys(Keys.ARROW_DOWN)
                             country_input.send_keys(Keys.ENTER)
+                            
+                    #check if input value is Philippines
                     try:
                         time.sleep(1)
-                        #check if input value is Philippines
                         element = WebDriverWait(driver,5).until(
                             EC.presence_of_element_located((By.XPATH, "//input[@id='downshift-2-input']"))
                         )
                         
-                         # Find the input element by XPath
+                        # Find the input element by XPath
                         input_element = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
 
                         # Get the value of the input element
                         value = input_element.get_attribute("value")
                         print("Input element value: ", value)
+                        
                         if country_name == value:
                              print("-----Sucessfully selected Philippines------")
                         else:
                             print("input_element value is different")
-                            print("Throwing error")
+                            print(f"The SDG you're currently in: {links_click + 1}")
+
+                            # Attempt to click the "Next" button
+                            time.sleep(3)
+                            try:
+                                print("---Proceeding to the next page----")
+                                next_button = WebDriverWait(driver, 10).until(
+                                    EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
+                                )
+                                next_button.click()
+                                links_click += 1
+                                print(f"Clicked Next button {links_click} times")
+                                print(f"Navigated to Page {links_click + 1}")
+                                continue#skipping current iteration
+                            except TimeoutException:
+                                print("Next button not found or not clickable. Exiting loop.")
+                                break    
                     except Exception as e:
-                        print(f"SDG: {links_click + 1}")
-                        raise RuntimeError("Failed to locate select the desired country/region\n") from e
-                        
+                        print("Can't find the input value")
+                        print(f"Error: {e}")
                 except Exception as e:
                     print(f"Error: {e}")
-                    print("Can't select country")
+                    print("Failed to select the desired country/region\n")
                 
                 # Step 2: Selecting the container for the list of universities
                 time.sleep(3)
@@ -314,7 +330,7 @@ try:
                 print("Next button not found or not clickable. Exiting loop.")
                 break
                 
-        print("\n Sucessfully navigated all webpages")        
+            print("\n Sucessfully navigated all webpages")        
     # user defined function for the scraping    
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
