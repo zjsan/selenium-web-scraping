@@ -122,10 +122,12 @@ try:
             while attempt < max_retries:
                 try:
                     time.sleep(3)
+                    print("Finding web page's iframe")
                     element = WebDriverWait(driver, 15).until
                     (EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
                     print("---Iframe found---")
-                    print("Proceeding to switch from default view to iframe")
+                    time.sleep(1)
+                    print("Proceeding to switch from default view to iframe\n")
                     break
                 except TimeoutException:
                     attempt += 1
@@ -138,6 +140,8 @@ try:
                 time.sleep(2)
                 iframe = driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']")
                 driver.switch_to.frame(iframe)
+                print("Switched to iframe")
+                time.sleep(1)
             except TimeoutException:
                 print("Iframe not found on this page. Skipping...")
                 break
@@ -176,14 +180,15 @@ try:
                 try:
                     time.sleep(2)
                     country_name = "Philippines"
+                    print("Finding location container")
                     element = WebDriverWait(driver,10).until(
                         EC.presence_of_element_located((By.XPATH, "//div[@class = 'LocationSearch__Container-sc-1dp07t6-0 dhVVKS']"))
                     )
-                    print("found element in the input country selection")
+                    print("Found location container")
                     
                     country_input = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
                     driver.find_element(By.XPATH, "//div[@role='combobox']").__setattr__("aria-expanded","true")#set combo box value to true to see list of regions/countriess
-                    print("\ntyping country name")
+                    print("typing country name\n")
                     
                     #individually type the country name in the input field
                     for char in country_name:
@@ -204,12 +209,13 @@ try:
                         # Find the input element by XPath
                         input_element = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
 
+                        print("Retrieving input value for location")
                         # Get the value of the input element
                         value = input_element.get_attribute("value")
-                        print("Input element value: ", value)
+                        print("\nInput element value:", value)
                         
                         if country_name == value:
-                             print("-----Sucessfully selected Philippines------")
+                             print("---Sucessfully selected Philippines---")
                         else:
                             print("input_element value is different")
                             print(f"The SDG you're currently in: {links_click + 1}")
@@ -222,6 +228,7 @@ try:
                                 next_button = WebDriverWait(driver, 10).until(
                                     EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
                                 )
+                                time.sleep(0.3)
                                 next_button.click()
                                 links_click += 1
                                 print(f"Clicked Next button {links_click} times")
@@ -245,7 +252,7 @@ try:
                 attempt = 0
                 while attempt < max_retries:
                     try:
-                        print("\n---Finding university container---\n")
+                        print("\n---Finding university container---")
                         WebDriverWait(driver, 15).until(
                             EC.presence_of_element_located((By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']"))
                         )
@@ -256,8 +263,9 @@ try:
                         WebDriverWait(driver, 10).until(
                             EC.presence_of_element_located((By.XPATH, "//span[@class='PeerSelect__InstitutionName-sc-cfs1fm-6 jBTLtN']"))
                         )
-                        print("\nFound universities container\n")
+                        print("\nFound universities container")
                         driver.execute_script("window.stop();")  # Stops current page loading
+                        time.sleep(2)#allow time to load the script
                         break  # Exit loop if successful
                     except  Exception as e:
                         attempt += 1
@@ -275,7 +283,7 @@ try:
                     university_length = len(university_name_buttons)
                     print(f"Total universities found: {university_length}")
                     print("Clicking university buttons")
-                    print("Proceeding to Batch Processing")
+                    print("Proceeding to Batch Processing\n")
                 except Exception as e:
                     raise RuntimeError("Failed to retrieve university buttons") from e
                 
@@ -285,16 +293,16 @@ try:
                 click_count = 0  # Counter for clicks
 
                 for batch_start in range(0, university_length, batch_size):
-                    # Reset selections if not the first batch
-                    time.sleep(1)
+                    time.sleep(2)#delay for the batch processing
                     try:
+                        # Reset selections if not the first batch
                         if batch_start > 0:
                             try:
                                 time.sleep(1)
                                 reset_button = driver.find_element(By.XPATH, "//button[text()='Reset benchmark']")
                                 reset_button.click()
-                                time.sleep(2)  # Allow time for reset
-                                print("Selections reset for the next batch")
+                                time.sleep(3)  # Allow time for reset
+                                print("Selections reset for the next batch\n")
                             except Exception as e:
                                 print("No reset button found or reset failed:", e)
 
@@ -313,11 +321,14 @@ try:
                         # Step 5: Apply selections and download data
                         try:
                             time.sleep(3)
-                            # Apply button
-                            print("\n---Clicking Apply button---\n")
+                            
+                            # Findling Apply button
+                            print("\n---Finding Apply button---\n")
+                            
                             element = WebDriverWait(driver, 15).until(
                             EC.presence_of_element_located((By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']"))
                             )
+                            print("Clicking Apply button")
                             apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
                             time.sleep(1)
                             apply_button.click()
@@ -336,7 +347,7 @@ try:
                 print("Error in scraping the data. Exiting loop.")
                 break
                
-            print("\nSucessfully scrap data in the current web page")               
+            print("\nSucessfully scrap data in the current web page\n")               
             # Attempt to click the "Next" button
             time.sleep(3)
             try:
@@ -344,10 +355,12 @@ try:
                 next_button = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
                 )
+                time.sleep(0.3)
                 next_button.click()
                 links_click += 1
+        
                 print(f"Clicked Next button {links_click} times")
-                print(f"Navigated to Page {links_click + 1}")
+                print(f"Navigated to Page {links_click + 1}\n")
             except TimeoutException:
                 print("Next button not found or not clickable. Exiting loop.")
                 break     
