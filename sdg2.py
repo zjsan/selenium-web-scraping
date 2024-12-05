@@ -143,7 +143,7 @@ try:
                 print(element.text)
                 page_title = driver.find_element(By.XPATH, "//h1[@class='SDGTitle__TitleWrapper-sc-4tg6e9-0 kfKJKx']") 
                 print(page_title.text)
-                print("\n------Page redirect success------")
+                print("\n------Page redirect success------\n")
                 
             except TimeoutException:
                 print("Desired element not found on this page.")
@@ -166,9 +166,10 @@ try:
                         EC.presence_of_element_located((By.XPATH, "//div[@class = 'LocationSearch__Container-sc-1dp07t6-0 dhVVKS']"))
                     )
                     print("found element in the country selection")
+                    
                     country_input = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
                     driver.find_element(By.XPATH, "//div[@role='combobox']").__setattr__("aria-expanded","true")#set combo box value to true to see list of regions/countriess
-                    print("----typing country name-----")
+                    print("\n----typing country name-----")
                     
                     #individually type the country name in the input field
                     for char in country_name:
@@ -178,8 +179,28 @@ try:
                         if char == "s":
                             country_input.send_keys(Keys.ARROW_DOWN)
                             country_input.send_keys(Keys.ENTER)
-                    print("-----Sucessfully selected region/country------")
-                    
+                    try:
+                        time.sleep(1)
+                        #check if input value is Philippines
+                        element = WebDriverWait(driver,5).until(
+                            EC.presence_of_element_located((By.XPATH, "//input[@id='downshift-2-input']"))
+                        )
+                        
+                         # Find the input element by XPath
+                        input_element = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
+
+                        # Get the value of the input element
+                        value = input_element.get_attribute("value")
+                        print("Input element value: ", value)
+                        if country_name == value:
+                             print("-----Sucessfully selected Philippines------")
+                        else:
+                            print("input_element value is different")
+                            print("Throwing error")
+                    except Exception as e:
+                        print(f"SDG: {links_click + 1}")
+                        raise RuntimeError("Failed to locate select the desired country/region\n") from e
+                        
                 except Exception as e:
                     print(f"Error: {e}")
                     print("Can't select country")
