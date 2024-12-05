@@ -127,7 +127,7 @@ try:
                     (EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
                     print("---Iframe found---")
                     time.sleep(1)
-                    print("Proceeding to switch from default view to iframe\n")
+                    print("\nProceeding to switch from default view to iframe\n")
                     break
                 except TimeoutException:
                     attempt += 1
@@ -140,7 +140,7 @@ try:
                 time.sleep(2)
                 iframe = driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']")
                 driver.switch_to.frame(iframe)
-                print("Switched to iframe")
+                print("\nSwitched to iframe")
                 time.sleep(1)
             except TimeoutException:
                 print("Iframe not found on this page. Skipping...")
@@ -209,7 +209,7 @@ try:
                         # Find the input element by XPath
                         input_element = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
 
-                        print("Retrieving input value for location")
+                        print("\nRetrieving input value for country/region location")
                         # Get the value of the input element
                         value = input_element.get_attribute("value")
                         print("\nInput element value:", value)
@@ -231,8 +231,10 @@ try:
                                 time.sleep(0.3)
                                 next_button.click()
                                 links_click += 1
-                                print(f"Clicked Next button {links_click} times")
-                                print(f"Navigated to Page {links_click + 1}")
+                                print(f"\nClicked Next button {links_click} times")
+                                print("Successfully clicked Next Button. Navigating to the next page")
+                                time.sleep(1)
+                                print(f"Navigated to Page {links_click + 1}\n")
                                 continue#skipping current iteration
                             except TimeoutException:
                                 print("Next button not found or not clickable. Exiting loop.")
@@ -337,6 +339,8 @@ try:
                             
                         except Exception as e:
                             print(f"An unexpected error occurred in clicking apply button : {e}") 
+                        
+                        #---download data here---
                             
                     except Exception as e:
                         raise RuntimeError("Failed to process universities in batches") from e
@@ -358,8 +362,10 @@ try:
                 time.sleep(0.3)
                 next_button.click()
                 links_click += 1
-        
-                print(f"Clicked Next button {links_click} times")
+
+                print(f"\nClicked Next button {links_click} times")
+                print("Successfully clicked Next Button. Navigating to the next page")
+                time.sleep(1)
                 print(f"Navigated to Page {links_click + 1}\n")
             except TimeoutException:
                 print("Next button not found or not clickable. Exiting loop.")
