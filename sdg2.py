@@ -255,11 +255,11 @@ try:
                 while attempt < max_retries:
                     try:
                         print("\n---Finding university container---")
-                        WebDriverWait(driver, 15).until(
+                        WebDriverWait(driver, 10).until(
                             EC.presence_of_element_located((By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']"))
                         )
                         element = driver.find_element(By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
-                        WebDriverWait(driver, 15).until(
+                        WebDriverWait(driver, 10).until(
                             EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']"))
                         )
                         WebDriverWait(driver, 10).until(
@@ -303,7 +303,7 @@ try:
                                 time.sleep(1)
                                 reset_button = driver.find_element(By.XPATH, "//button[text()='Reset benchmark']")
                                 reset_button.click()
-                                time.sleep(3)  # Allow time for reset
+                                time.sleep(2)  # Allow time for reset
                                 print("Selections reset for the next batch\n")
                             except Exception as e:
                                 print("No reset button found or reset failed:", e)
@@ -322,8 +322,7 @@ try:
                                  
                         # Step 5: Apply selections and download data
                         try:
-                            time.sleep(3)
-                            
+                            time.sleep(2)
                             # Findling Apply button
                             print("\n---Finding Apply button---\n")
                             
@@ -334,8 +333,7 @@ try:
                             apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
                             time.sleep(1)
                             apply_button.click()
-                            time.sleep(2)
-                            print("----Successfully clicked apply button----")
+                            print("\n----Successfully clicked apply button----")
                             
                         except Exception as e:
                             print(f"An unexpected error occurred in clicking apply button : {e}") 
