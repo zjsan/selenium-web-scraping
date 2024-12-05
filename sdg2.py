@@ -104,11 +104,11 @@ try:
         sys.exit()
                  
     try:
-   
+        
         links_click = 0#clicked counter
         links_length = 17 #number for the remaining sdg link redirection
 
-        #main loop for page redirection
+        #main loop for page navigation
         for i in range(links_length):
             
             time.sleep(3)  
@@ -132,8 +132,7 @@ try:
                     print("Iframe not found. Check if redirection worked.")
                     print(f"Attempting to find Iframe. Retrying... ({attempt}/{max_retries})")
                 except Exception as e:
-                    raise RuntimeError("Failed to locate Iframe") from e
-                    
+                    raise RuntimeError("Failed to locate Iframe") from e       
             #Switch to the iframe
             try:
                 time.sleep(2)
@@ -215,6 +214,7 @@ try:
                             print("input_element value is different")
                             print(f"The SDG you're currently in: {links_click + 1}")
 
+                            #if unsucessfull in the current page proceed to next page
                             # Attempt to click the "Next" button
                             time.sleep(3)
                             try:
@@ -274,6 +274,8 @@ try:
                     university_name_buttons = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
                     university_length = len(university_name_buttons)
                     print(f"Total universities found: {university_length}")
+                    print("Clicking university buttons")
+                    print("Proceeding to Batch Processing")
                 except Exception as e:
                     raise RuntimeError("Failed to retrieve university buttons") from e
                 
@@ -333,10 +335,12 @@ try:
             except TimeoutException:
                 print("Error in scraping the data. Exiting loop.")
                 break
-                           
+               
+            print("\nSucessfully scrap data in the current web page")               
             # Attempt to click the "Next" button
             time.sleep(3)
             try:
+                print("---Proceeding to the next page----")
                 next_button = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
                 )
@@ -346,10 +350,8 @@ try:
                 print(f"Navigated to Page {links_click + 1}")
             except TimeoutException:
                 print("Next button not found or not clickable. Exiting loop.")
-                break
-                
-            print("\nSucessfully scrap data in the current web page")        
-    # user defined function for the scraping    
+                break     
+  
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     
