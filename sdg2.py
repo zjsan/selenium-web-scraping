@@ -105,7 +105,7 @@ try:
     try:
    
         links_click = 0#clicked counter
-        links_length = 16 #number for the remaining sdg link redirection
+        links_length = 17 #number for the remaining sdg link redirection
 
         #main loop for page redirection
         for i in range(links_length):
@@ -164,11 +164,11 @@ try:
                     element = WebDriverWait(driver,10).until(
                         EC.presence_of_element_located((By.XPATH, "//div[@class = 'LocationSearch__Container-sc-1dp07t6-0 dhVVKS']"))
                     )
-                    print("found element in the country selection")
+                    print("found element in the input country selection")
                     
                     country_input = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
                     driver.find_element(By.XPATH, "//div[@role='combobox']").__setattr__("aria-expanded","true")#set combo box value to true to see list of regions/countriess
-                    print("\n----typing country name-----")
+                    print("\ntyping country name")
                     
                     #individually type the country name in the input field
                     for char in country_name:
@@ -272,6 +272,7 @@ try:
                     try:
                         if batch_start > 0:
                             try:
+                                time.sleep(1)
                                 reset_button = driver.find_element(By.XPATH, "//button[text()='Reset benchmark']")
                                 reset_button.click()
                                 time.sleep(2)  # Allow time for reset
@@ -300,9 +301,10 @@ try:
                             EC.presence_of_element_located((By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']"))
                             )
                             apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
+                            time.sleep(1)
                             apply_button.click()
                             time.sleep(2)
-                            print("Successfully clicked apply button")
+                            print("----Successfully clicked apply button----")
                             
                         except Exception as e:
                             print(f"An unexpected error occurred in clicking apply button : {e}") 
@@ -330,7 +332,7 @@ try:
                 print("Next button not found or not clickable. Exiting loop.")
                 break
                 
-            print("\n Sucessfully navigated all webpages")        
+            print("\nSucessfully scrap data in the current web page")        
     # user defined function for the scraping    
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
