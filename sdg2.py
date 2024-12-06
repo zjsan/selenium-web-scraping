@@ -21,10 +21,9 @@ import sys
 chrome_options = Options()
 chrome_options.add_argument("--incognito")
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Helps bypass detection
-
+chrome_options.add_argument("download.default_directory=C:/Users/User/Documents/SDG Datas/Scraping/Scrap data")#download directory
 service = Service(executable_path = "chromedriver.exe")
 driver = webdriver.Chrome(service=service,options=chrome_options)
-
 
 # Login credentials
 username = "jpacang@mmsu.edu.ph"
@@ -307,7 +306,7 @@ try:
                                 print("Selections reset for the next batch\n")
                             except Exception as e:
                                 print("No reset button found or reset failed:", e)
-
+                                
                         # Select universities in the current batch
                         for index in range(batch_start, min(batch_start + batch_size, university_length)):
                             try:
@@ -339,7 +338,7 @@ try:
                             print(f"An unexpected error occurred in clicking apply button : {e}") 
                         
                         #---download data here---
-                        # Download the Excel file for the current batch
+                        #Download the Excel file for the current batch
                         # try:
                         #     element = WebDriverWait(driver, 10).until(
                         #         EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
@@ -357,6 +356,25 @@ try:
                         #     time.sleep(5)  # Wait for download completion
                         # except Exception as e:
                         #     print(f"Error occurred while downloading excel file: {e}")
+                        #     #if unsucessfull in the current page proceed to next page
+                        #     # Attempt to click the "Next" button
+                        #     time.sleep(3)
+                        #     try:
+                        #         print("---Proceeding to the next page----")
+                        #         next_button = WebDriverWait(driver, 10).until(
+                        #             EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
+                        #         )
+                        #         time.sleep(0.4)
+                        #         next_button.click()
+                        #         links_click += 1
+                        #         print(f"\nClicked Next button {links_click} times")
+                        #         print("Successfully clicked Next Button. Navigating to the next page")
+                        #         time.sleep(1)
+                        #         print(f"Navigated to Page {links_click + 1}\n")
+                        #         continue#skipping current iteration
+                        #     except TimeoutException:
+                        #         print("Next button not found or not clickable. Exiting loop.")
+                        #         break    
                             
                     except Exception as e:
                         raise RuntimeError("Failed to process universities in batches") from e
@@ -389,7 +407,7 @@ try:
             
             if links_click == 17:
                 print("\n---Successfully Processed all pages---")
-                print("Exiting the program")
+                print("Exiting the program in a few seconds")
                     
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
