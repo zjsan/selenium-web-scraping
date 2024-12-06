@@ -339,43 +339,44 @@ try:
                         
                         #---download data here---
                         #Download the Excel file for the current batch
-                        # try:
-                        #     element = WebDriverWait(driver, 10).until(
-                        #         EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
-                        #     )
-                        #     download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
-                        #     download_button.click()
-                        #     print("\n---Download button clicked---\n")
+                        try:
+                            time.sleep(1)
+                            element = WebDriverWait(driver, 10).until(
+                                EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
+                            )
+                            download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
+                            download_button.click()
+                            print("\n---Download button clicked---\n")
 
-                        #     WebDriverWait(driver, 10).until(
-                        #         EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
-                        #     )
-                        #     download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
-                        #     download_excel.click()
-                        #     print(f"\n---Batch {batch_start // batch_size + 1} downloaded---\n")
-                        #     time.sleep(5)  # Wait for download completion
-                        # except Exception as e:
-                        #     print(f"Error occurred while downloading excel file: {e}")
-                        #     #if unsucessfull in the current page proceed to next page
-                        #     # Attempt to click the "Next" button
-                        #     time.sleep(3)
-                        #     try:
-                        #         print("---Proceeding to the next page----")
-                        #         next_button = WebDriverWait(driver, 10).until(
-                        #             EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
-                        #         )
-                        #         time.sleep(0.4)
-                        #         next_button.click()
-                        #         links_click += 1
-                        #         print(f"\nClicked Next button {links_click} times")
-                        #         print("Successfully clicked Next Button. Navigating to the next page")
-                        #         time.sleep(1)
-                        #         print(f"Navigated to Page {links_click + 1}\n")
-                        #         continue#skipping current iteration
-                        #     except TimeoutException:
-                        #         print("Next button not found or not clickable. Exiting loop.")
-                        #         break    
-                            
+                            WebDriverWait(driver, 10).until(
+                                EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
+                            )
+                            time.sleep(3)
+                            download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
+                            download_excel.click()
+                            print(f"\n---Batch {batch_start // batch_size + 1} downloaded---\n")
+                            time.sleep(5)  # Wait for download completion
+                        except Exception as e:
+                            print(f"Error occurred while downloading excel file: {e}")
+                            #if unsucessfull in the current page proceed to next page
+                            # Attempt to click the "Next" button
+                            time.sleep(3)
+                            try:
+                                print("---Proceeding to the next page----")
+                                next_button = WebDriverWait(driver, 10).until(
+                                    EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
+                                )
+                                time.sleep(0.4)
+                                next_button.click()
+                                links_click += 1
+                                print(f"\nClicked Next button {links_click} times")
+                                print("Successfully clicked Next Button. Navigating to the next page")
+                                time.sleep(1)
+                                print(f"Navigated to Page {links_click + 1}\n")
+                                continue#skipping current iteration
+                            except TimeoutException:
+                                print("Next button not found or not clickable. Exiting loop.")
+                                break       
                     except Exception as e:
                         raise RuntimeError("Failed to process universities in batches") from e
                     
