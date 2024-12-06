@@ -289,7 +289,7 @@ try:
                     raise RuntimeError("Failed to retrieve university buttons") from e
                 
                 # Step 4: Process universities in batches (Batch Processing Logic)
-                time.sleep(2)
+                time.sleep(1)
                 batch_size = 35  # Number of universities to process per batch
                 click_count = 0  # Counter for clicks
 
