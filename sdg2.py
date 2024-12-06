@@ -340,7 +340,7 @@ try:
                         #---download data here---
                         #Download the Excel file for the current batch
                         try:
-                            time.sleep(1)
+                            time.sleep(3)
                             element = WebDriverWait(driver, 10).until(
                                 EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
                             )
@@ -358,6 +358,7 @@ try:
                             time.sleep(5)  # Wait for download completion
                         except Exception as e:
                             print(f"Error occurred while downloading excel file: {e}")
+                            
                             #if unsucessfull in the current page proceed to next page
                             # Attempt to click the "Next" button
                             time.sleep(3)
