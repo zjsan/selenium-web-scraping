@@ -459,6 +459,7 @@ try:
 except Exception as e:
     logging.error(f"Error in login found: {e}")
 finally:
+    print("Program exiting....")
     time.sleep(15)
     driver.quit()
     
