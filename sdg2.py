@@ -386,7 +386,11 @@ try:
             except TimeoutException:
                 print("Next button not found or not clickable. Exiting loop.")
                 break     
-  
+            
+            if links_click == 17:
+                print("\n---Successfully Processed all pages---")
+                print("Exiting the program")
+                    
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     
