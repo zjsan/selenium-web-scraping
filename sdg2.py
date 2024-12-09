@@ -363,9 +363,20 @@ try:
                             time.sleep(1)
                             apply_button.click()
                             print("\n----Successfully clicked apply button----")
-                            
                         except Exception as e:
                             print(f"An unexpected error occurred in clicking apply button : {e}") 
+                        
+                        #clicking the table button
+                        try:
+                            time.sleep(1)
+                            # Click the Table button
+                            print("---Clicking Table button---\n")
+                            table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
+                            table_button.click()
+                            time.sleep(2)
+                            print("---Table button clicked---")
+                        except Exception as e:
+                            print(f"An unexpected error occurred in clicking Table button : {e}") 
                         
                         #---download data here---
                         #Download the Excel file for the current batch
