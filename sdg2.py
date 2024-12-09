@@ -23,7 +23,7 @@ chrome_options.add_argument("--incognito")
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Helps bypass detection
 
 # Set up the custom download directory path 
-download_dir = os.path.join(os.getcwd(), r"C:\\Users\\User\\Documents\\SDG Datas\\Scraping\\")
+download_dir = os.path.join(os.getcwd(), "C:\\Users\\User\\Documents\\SDG Datas\\Scraping")
 preferences = {"profile.default_content_settings.popups": 0,
              "download.default_directory": 
                         download_dir,#IMPORTANT - ENDING SLASH V IMPORTANT
