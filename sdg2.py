@@ -28,14 +28,12 @@ download_dir = r"C:\Users\User\Documents\SDG Datas\Scraping\Scrap data"  # Use r
 # Ensure the directory exists
 os.makedirs(download_dir, exist_ok=True)
 
-# Set up Chrome preferences for downloading files automatically
 chrome_options.add_experimental_option('prefs', {
-    "profile.default_content_settings.popups": 0,
+    "profile.default_content_settings.popups": 0,  # Block popups
     "download.default_directory": download_dir,  # Set the download directory
-    "download.prompt_for_download": False,  # Skip "Save As" dialog
-    "directory_upgrade": True,  # Automatically overwrite files in the directory
-    "safebrowsing.enabled": True,  # Enable safe browsing
-    "download.extensions_to_open": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"  # For Excel files
+    "download.prompt_for_download": False,  # Skip the "Save As" dialog
+    "directory_upgrade": True,  # Automatically overwrite existing files
+    "safebrowsing.enabled": True  # Enable safe browsing for downloads
 })
 
 service = Service(executable_path = "chromedriver.exe")
