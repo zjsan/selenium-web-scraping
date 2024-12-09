@@ -62,6 +62,7 @@ try:
         print("Error in the Select an institution page")
     
     #navigating through the page and finding an element
+    time.sleep(2)
     element = WebDriverWait(driver, 10).until(
           EC.presence_of_element_located((By.XPATH, "//p[@class='chakra-text css-1qawl6f']"))
       )
@@ -70,12 +71,14 @@ try:
     
     #clicking the sdg impact button
     try:
+      time.sleep(1)
       click_side_bar = WebDriverWait(driver, 10).until(
           EC.element_to_be_clickable((By.XPATH, "//button[@class='chakra-button css-1udhqck']"))
       )
       click_side_bar.click()
       print("side_bar button clicked sucessfully")
       
+      time.sleep(3)
       #clicking the link to redirect to https://www.timeshighereducation.com/datapoints/sdg/details/1
       click_details_link = driver.find_element(By.XPATH, "//ul[@class='css-1ngfogx']/li[2]/a") #finding this elements
       click_details_link.click()
@@ -85,6 +88,7 @@ try:
       logging.error("Sidebar button not clickable.")
 
     #if successful redirect
+    time.sleep(1)
     # Wait for the iframe to be present
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
 
@@ -103,6 +107,7 @@ try:
     )
     
     #entering input in the country/region selection
+    time.sleep(1)
     try:
         country_name = "Philippines"
         element = WebDriverWait(driver,10).until(
@@ -113,6 +118,7 @@ try:
         driver.find_element(By.XPATH, "//div[@role='combobox']").__setattr__("aria-expanded","true")#set combo box value to true to see list of regions/countriess
         print("----typing country name-----")
         
+        time.sleep(1)
         #individually type the country name in the input field
         #hope it will work this time kase pagod na ako putanginaaaaaaaaaaa
         for char in country_name:
@@ -129,6 +135,7 @@ try:
         print("Can't select country")
 
     # Selecting elements from universities
+    time.sleep(2)
     try:
         # Selecting the container for the list of universities
         element = driver.find_element(By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
@@ -141,6 +148,7 @@ try:
         print("\nFound universities\n")
 
         # Select all university buttons
+        time.sleep(1)
         university_name_buttons = driver.find_elements(By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button")
         university_length = len(university_name_buttons)
         print(f"Total universities found: {university_length}")
@@ -173,6 +181,7 @@ try:
             print(f"Batch {batch_start // batch_size + 1} - Selected {click_count} universities")
 
             # Apply selections
+            time.sleep(1)
             try:
                 print("\n---Clicking Apply button---\n")
                 apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
@@ -187,6 +196,7 @@ try:
                 print("---Table button clicked---")
 
                 # Download the Excel file for the current batch
+                time.sleep(1)
                 element = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
                 )
