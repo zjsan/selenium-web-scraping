@@ -61,13 +61,14 @@ try:
     
     #new code- select institution 
     try:
+       time.sleep(3)
        element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//div[@class = 'chakra-modal__body css-1tcbjr4']"))
         )
        container = WebDriverWait(driver,5).until(
            EC.presence_of_element_located((By.XPATH, "//div[@class = 'css-kfokcf']"))
        )
-       mmsu = driver.find_element(By.XPATH, "//div[@class = 'css-18oq3rf']")
+       mmsu = driver.find_element(By.XPATH, "//div[@class = 'css-18oq3rf']/img[@alt ='Mariano Marcos State University logo']")
        mmsu.click()
     except Exception as e:
         print(f"Error: {e}")
