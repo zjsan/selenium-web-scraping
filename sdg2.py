@@ -29,12 +29,13 @@ download_dir = r"C:\Users\User\Documents\SDG Datas\Scraping\Scrap data"  # Use r
 os.makedirs(download_dir, exist_ok=True)
 
 chrome_options.add_experimental_option('prefs', {
-    "profile.default_content_settings.popups": 0,  # Block popups
-    "download.default_directory": download_dir,  # Set the download directory
-    "download.prompt_for_download": False,  # Skip the "Save As" dialog
-    "directory_upgrade": True,  # Automatically overwrite existing files
-    "safebrowsing.enabled": True  # Enable safe browsing for downloads
+    "profile.default_content_settings.popups": 0,
+    "download.default_directory": download_dir,
+    "download.prompt_for_download": False,
+    "directory_upgrade": True,
+    "safebrowsing.enabled": True
 })
+
 
 service = Service(executable_path = "chromedriver.exe")
 driver = webdriver.Chrome(service=service,options=chrome_options)
