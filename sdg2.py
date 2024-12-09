@@ -21,7 +21,11 @@ import sys
 chrome_options = Options()
 chrome_options.add_argument("--incognito")
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Helps bypass detection
-chrome_options.add_argument("download.default_directory=C:/Users/User/Documents/SDG Datas/Scraping/Scrap data")#download directory
+prefs = {"profile.default_content_settings.popups": 0,
+             "download.default_directory": 
+                        r"C:\Users\User\Documents\SDG Datas\Scraping\\",#IMPORTANT - ENDING SLASH V IMPORTANT
+             "directory_upgrade": True}#download directory
+chrome_options.add_experimental_option("prefs", prefs)
 service = Service(executable_path = "chromedriver.exe")
 driver = webdriver.Chrome(service=service,options=chrome_options)
 
