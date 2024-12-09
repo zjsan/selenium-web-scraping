@@ -24,11 +24,16 @@ chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # 
 
 # Set up the custom download directory path 
 download_dir = os.path.join(os.getcwd(), "C:\\Users\\User\\Documents\\SDG Datas\\Scraping")
-preferences = {"profile.default_content_settings.popups": 0,
+# preferences = {"profile.default_content_settings.popups": 0,
+#              "download.default_directory": 
+#                         download_dir,#IMPORTANT - ENDING SLASH V IMPORTANT
+#              "download.directory_upgrade": True}#download directory
+chrome_options.add_experimental_option('prefs', 
+            {"profile.default_content_settings.popups": 0,
              "download.default_directory": 
                         download_dir,#IMPORTANT - ENDING SLASH V IMPORTANT
-             "download.directory_upgrade": True}#download directory
-chrome_options.add_experimental_option('prefs', preferences )
+             "download.directory_upgrade": True,
+              'safebrowsing.enabled': True})#download directory)
 service = Service(executable_path = "chromedriver.exe")
 driver = webdriver.Chrome(service=service,options=chrome_options)
 
