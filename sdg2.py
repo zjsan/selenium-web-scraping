@@ -55,6 +55,18 @@ try:
     print("Login successful!")
       
     time.sleep(4)
+    
+    #new code
+    try:
+       element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//div[@class = 'chakra-modal__body css-1tcbjr4']"))
+        )
+       mmsu = driver.find_element(By.XPATH, "//div[@class = 'css-5d1p85']")
+       mmsu.click() 
+    except Exception as e:
+        print(f"Error: {e}")
+        print("Error in the Select an institution page")
+        
     #navigating through the page and finding an element
     try:
         element = WebDriverWait(driver, 13).until(
