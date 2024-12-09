@@ -21,11 +21,14 @@ import sys
 chrome_options = Options()
 chrome_options.add_argument("--incognito")
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Helps bypass detection
-prefs = {"profile.default_content_settings.popups": 0,
+
+# Set up the custom download directory path 
+download_dir = os.path.join(os.getcwd(), r"C:\\Users\\User\\Documents\\SDG Datas\\Scraping\\")
+preferences = {"profile.default_content_settings.popups": 0,
              "download.default_directory": 
-                        r"C:\Users\User\Documents\SDG Datas\Scraping\\",#IMPORTANT - ENDING SLASH V IMPORTANT
-             "directory_upgrade": True}#download directory
-chrome_options.add_experimental_option("prefs", prefs)
+                        download_dir,#IMPORTANT - ENDING SLASH V IMPORTANT
+             "download.directory_upgrade": True}#download directory
+chrome_options.add_experimental_option('prefs', preferences )
 service = Service(executable_path = "chromedriver.exe")
 driver = webdriver.Chrome(service=service,options=chrome_options)
 
@@ -56,13 +59,16 @@ try:
       
     time.sleep(4)
     
-    #new code
+    #new code- select institution 
     try:
        element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//div[@class = 'chakra-modal__body css-1tcbjr4']"))
         )
-       mmsu = driver.find_element(By.XPATH, "//div[@class = 'css-5d1p85']")
-       mmsu.click() 
+       container = WebDriverWait(driver,5).until(
+           EC.presence_of_element_located((By.XPATH, "//div[@class = 'css-kfokcf']"))
+       )
+       mmsu = driver.find_element(By.XPATH, "//div[@class = 'css-18oq3rf']")
+       mmsu.click()
     except Exception as e:
         print(f"Error: {e}")
         print("Error in the Select an institution page")
