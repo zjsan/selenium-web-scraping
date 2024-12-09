@@ -45,13 +45,7 @@ try:
     print(driver.title)#check for successful login
     print("Login successful!")
     
-    #navigating through the page and finding an element
-    element = WebDriverWait(driver, 10).until(
-          EC.presence_of_element_located((By.XPATH, "//p[@class='chakra-text css-1qawl6f']"))
-      )
-    print("\n\n",element.text)
-    
-    
+    time.sleep(4)
     #new code- select institution 
     try:
        time.sleep(3)
@@ -67,6 +61,11 @@ try:
         print(f"Error: {e}")
         print("Error in the Select an institution page")
     
+    #navigating through the page and finding an element
+    element = WebDriverWait(driver, 10).until(
+          EC.presence_of_element_located((By.XPATH, "//p[@class='chakra-text css-1qawl6f']"))
+      )
+    print("\n\n",element.text)
      #-----Navigating the UI to redirect to the desired page: https://www.timeshighereducation.com/datapoints/sdg/details/1-------
     
     #clicking the sdg impact button
