@@ -349,39 +349,24 @@ try:
                                 print("Exiting the loop")
                                 break
                                  
-                        # Step 5: Apply selections and download data
+                        # Apply selections
+                        time.sleep(1)
                         try:
-                            time.sleep(2)
-                            # Findling Apply button
-                            print("\n---Finding Apply button---\n")
-                            
-                            element = WebDriverWait(driver, 15).until(
-                            EC.presence_of_element_located((By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']"))
-                            )
-                            print("Clicking Apply button")
+                            print("\n---Clicking Apply button---\n")
                             apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
-                            time.sleep(1)
                             apply_button.click()
-                            print("\n----Successfully clicked apply button----")
-                        except Exception as e:
-                            print(f"An unexpected error occurred in clicking apply button : {e}") 
-                        
-                        #clicking the table button
-                        try:
-                            time.sleep(1)
+                            print("Clicked Apply button")
+                            time.sleep(2)
+
                             # Click the Table button
-                            print("---Clicking Table button---\n")
+                            print("\n---Clicking Table button---\n")
                             table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
                             table_button.click()
                             time.sleep(2)
-                            print("---Table button clicked---")
-                        except Exception as e:
-                            print(f"An unexpected error occurred in clicking Table button : {e}") 
-                        
-                        #---download data here---
-                        #Download the Excel file for the current batch
-                        try:
-                            time.sleep(3)
+                            print("Table button clicked")
+
+                            # Download the Excel file for the current batch
+                            time.sleep(1)
                             element = WebDriverWait(driver, 10).until(
                                 EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
                             )
@@ -392,13 +377,13 @@ try:
                             WebDriverWait(driver, 10).until(
                                 EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
                             )
-                            time.sleep(3)
                             download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
                             download_excel.click()
                             print(f"\n---Batch {batch_start // batch_size + 1} downloaded---\n")
                             time.sleep(5)  # Wait for download completion
+
                         except Exception as e:
-                            print(f"Error occurred while downloading excel file: {e}")
+                            print(f"Error during Apply/Table/Download steps in Batch {batch_start // batch_size + 1}: {e}")
                             
                             #if unsucessfull in the current page proceed to next page
                             # Attempt to click the "Next" button
