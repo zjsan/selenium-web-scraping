@@ -8,12 +8,33 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.chrome.options import Options
 
 import logging
 import time 
 import pandas as pd
 import numpy as np
 import os
+
+
+# Set up Chrome options
+chrome_options = Options()
+chrome_options.add_argument("--incognito")
+chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Helps bypass detection
+
+# Define the custom download directory (ensure it exists)
+download_dir = r"C:\Users\User\Documents\SDG Datas\Scraping\Scrap data"  # Use raw string for Windows paths
+
+# Ensure the directory exists
+os.makedirs(download_dir, exist_ok=True)
+
+chrome_options.add_experimental_option('prefs', {
+    "profile.default_content_settings.popups": 0,
+    "download.default_directory": download_dir,
+    "download.prompt_for_download": False,
+    "directory_upgrade": True,
+    "safebrowsing.enabled": True
+})
 
 
 service = Service(executable_path = "chromedriver.exe")
