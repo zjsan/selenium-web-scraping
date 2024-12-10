@@ -101,7 +101,7 @@ try:
     #inside page 1 = SDG1
     try:
         # Wait for the iframe to be present
-        WebDriverWait(driver, 11).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
+        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
 
         # Switch to the iframe
         driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@id='ImpactDetails']"))
@@ -186,11 +186,6 @@ try:
             try: 
                 time.sleep(2)   
                 #-------Scraping Logic-------       
-                #interacting with the selecting region and country section of the page
-                element = WebDriverWait(driver, 10).until(
-                    EC.presence_of_element_located((By.XPATH, "//div[@class = 'PeerSelectWrapper__Wrapper-sc-brqol7-1 kACRoa']"))
-                )
-                
                 #Step 1: entering input in the country/region selection
                 try:
                     time.sleep(2)
@@ -310,7 +305,7 @@ try:
                 click_count = 0  # Counter for clicks
 
                 for batch_start in range(0, university_length, batch_size):
-                    time.sleep(2)#delay for the batch processing
+                    time.sleep(1)#delay for the batch processing
                     try:
                         # Reset selections if not the first batch
                         if batch_start > 0:
@@ -341,15 +336,14 @@ try:
                             print("\n---Clicking Apply button---\n")
                             apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
                             apply_button.click()
-                            print("Clicked Apply button")
                             time.sleep(2)
 
                             # Click the Table button
-                            print("\n---Clicking Table button---\n")
+                            print("---Clicking Table button---\n")
                             table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
                             table_button.click()
                             time.sleep(2)
-                            print("Table button clicked")
+                            print("---Table button clicked---")
 
                             # Download the Excel file for the current batch
                             time.sleep(1)
@@ -370,7 +364,6 @@ try:
 
                         except Exception as e:
                             print(f"Error during Apply/Table/Download steps in Batch {batch_start // batch_size + 1}: {e}")
-                            
                             #if unsucessfull in the current page proceed to next page
                             # Attempt to click the "Next" button
                             time.sleep(3)
@@ -394,7 +387,8 @@ try:
                         raise RuntimeError("Failed to process universities in batches") from e
                     
                     print(f"Batch {batch_start // batch_size + 1} - Selected {click_count} universities")
-
+                    print("\nAll batches processed successfully\n")        
+                                      
             except TimeoutException:
                 print("Error in scraping the data. Exiting loop.")
                 break
@@ -425,50 +419,6 @@ try:
                     
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
-    
-    #-------Scraping Logic-------       
-
-    #         # Apply selections
-    #         try:
-    #             print("\n---Clicking Apply button---\n")
-    #             apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
-    #             apply_button.click()
-    #             time.sleep(2)
-
-    #             # Click the Table button
-    #             print("---Clicking Table button---\n")
-    #             table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
-    #             table_button.click()
-    #             time.sleep(2)
-    #             print("---Table button clicked---")
-
-    #             # Download the Excel file for the current batch
-    #             element = WebDriverWait(driver, 10).until(
-    #                 EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
-    #             )
-    #             download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
-    #             download_button.click()
-    #             print("\n---Download button clicked---\n")
-
-    #             WebDriverWait(driver, 10).until(
-    #                 EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
-    #             )
-    #             download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
-    #             download_excel.click()
-    #             print(f"\n---Batch {batch_start // batch_size + 1} downloaded---\n")
-    #             time.sleep(5)  # Wait for download completion
-
-    #         except Exception as e:
-    #             print(f"Error during Apply/Table/Download steps in Batch {batch_start // batch_size + 1}: {e}")
-
-    #     print("\nAll batches processed successfully\n")
-
-    # except Exception as e:
-    #     print(f"Error: {e}")
-    #     print("Error fetching universities")
-
-    # # Final processing or merging (if needed)
-    # print("\n-----Scraping Done-----")
 
 except Exception as e:
     logging.error(f"Error in login found: {e}")
