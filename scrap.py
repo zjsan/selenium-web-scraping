@@ -23,7 +23,7 @@ chrome_options.add_argument("--incognito")
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Helps bypass detection
 
 # Define the custom download directory (ensure it exists)
-download_dir = r"C:\\Users\\User\\Documents\\SDG Datas\\Scraping\\Scrap data"  # Use raw string for Windows paths
+download_dir = "C:\\Users\\User\\Documents\\SDG Datas\\Scraping\\"  # Use raw string for Windows paths
 
 # Ensure the directory exists
 os.makedirs(download_dir, exist_ok=True)
@@ -125,8 +125,7 @@ try:
     element = WebDriverWait(driver, 5).until(
         EC.presence_of_element_located((By.XPATH, "//div[@class = 'PeerSelectWrapper__Wrapper-sc-brqol7-1 kACRoa']"))
     )
-    
-    #entering input in the country/region selection
+
     time.sleep(1)
     try:
         
@@ -192,8 +191,10 @@ try:
                 print("Exiting the program loop")
                 break
             
-            #Step 1: entering input in the country/region selection
+            #-----Scraping Logic Here----
             try:
+                #-------Scraping Logic-------       
+                #Step 1: entering input in the country/region selection
                 time.sleep(2)
                 country_name = "Philippines"
                 print("Finding location container")
@@ -294,6 +295,7 @@ try:
                 
                 # Select all university buttons
                 time.sleep(1)
+                # Step 3: Selecting all university buttons
                 try:
                     element = WebDriverWait(driver, 15).until(
                             EC.presence_of_element_located((By.XPATH, "//ul[@class='PeerSelect__ListContainer-sc-cfs1fm-3 dVJxfI']/li/button"))
@@ -306,70 +308,95 @@ try:
                 except Exception as e:
                     raise RuntimeError("Failed to retrieve university buttons") from e
 
+                # Step 4: Process universities in batches (Batch Processing Logic)
                 batch_size = 35  # Number of universities to process per batch
                 click_count = 0  # Counter for clicks
 
                 # Process universities in batches
                 for batch_start in range(0, university_length, batch_size):
-                    # Reset selections if not the first batch
-                    if batch_start > 0:
-                        try:
-                            reset_button = driver.find_element(By.XPATH, "//button[text()='Reset benchmark']")
-                            reset_button.click()
-                            time.sleep(2)  # Allow time for reset
-                            print("Selections reset for the next batch")
-                        except Exception as e:
-                            print("No reset button found or reset failed")
-
-                    # Select universities in the current batch
-                    for index in range(batch_start, min(batch_start + batch_size, university_length)):
-                        try:
-                            university_name_buttons[index].click()
-                            click_count += 1
-                            print(f"Selected: {university_name_buttons[index].text}")
-                            time.sleep(0.3)  # Pause for UI responsiveness
-                        except Exception as e:
-                            print(f"Error clicking university button at index {index}: {e}")
-
-                    print(f"Batch {batch_start // batch_size + 1} - Selected {click_count} universities")
-                
-                    # Apply selections
                     time.sleep(1)
                     try:
-                        print("\n---Clicking Apply button---\n")
-                        apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
-                        apply_button.click()
-                        time.sleep(2)
+                        # Reset selections if not the first batch
+                        if batch_start > 0:
+                            try:
+                                reset_button = driver.find_element(By.XPATH, "//button[text()='Reset benchmark']")
+                                reset_button.click()
+                                time.sleep(2)  # Allow time for reset
+                                print("Selections reset for the next batch")
+                            except Exception as e:
+                                print("No reset button found or reset failed")
 
-                        # Click the Table button
-                        print("---Clicking Table button---\n")
-                        table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
-                        table_button.click()
-                        time.sleep(2)
-                        print("---Table button clicked---")
+                        # Select universities in the current batch
+                        for index in range(batch_start, min(batch_start + batch_size, university_length)):
+                            try:
+                                university_name_buttons[index].click()
+                                click_count += 1
+                                print(f"Selected: {university_name_buttons[index].text}")
+                                time.sleep(0.3)  # Pause for UI responsiveness
+                            except Exception as e:
+                                print(f"Error clicking university button at index {index}: {e}")
 
-                        # Download the Excel file for the current batch
+                        print(f"Batch {batch_start // batch_size + 1} - Selected {click_count} universities")
+                    
+                        # Step 5: Apply selections
                         time.sleep(1)
-                        element = WebDriverWait(driver, 10).until(
-                            EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
-                        )
-                        download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
-                        download_button.click()
-                        print("\n---Download button clicked---\n")
+                        try:
+                            print("\n---Clicking Apply button---\n")
+                            apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
+                            apply_button.click()
+                            time.sleep(2)
 
-                        WebDriverWait(driver, 10).until(
-                            EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
-                        )
-                        download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
-                        download_excel.click()
-                        print(f"\n---Batch {batch_start // batch_size + 1} downloaded---\n")
-                        time.sleep(5)  # Wait for download completion
+                            # Click the Table button
+                            print("---Clicking Table button---\n")
+                            table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
+                            table_button.click()
+                            time.sleep(2)
+                            print("---Table button clicked---")
 
+                            # Download the Excel file for the current batch
+                            time.sleep(1)
+                            element = WebDriverWait(driver, 10).until(
+                                EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
+                            )
+                            download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
+                            download_button.click()
+                            print("\n---Download button clicked---\n")
+
+                            WebDriverWait(driver, 10).until(
+                                EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
+                            )
+                            download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
+                            download_excel.click()
+                            print(f"\n---Batch {batch_start // batch_size + 1} downloaded---\n")
+                            time.sleep(5)  # Wait for download completion
+
+                        except Exception as e:
+                            print(f"Error during Apply/Table/Download steps in Batch {batch_start // batch_size + 1}: {e}")
+                            #if unsucessfull in the current page proceed to next page
+                            # Attempt to click the "Next" button
+                            time.sleep(3)
+                            try:
+                                print("---Proceeding to the next page----")
+                                next_button = WebDriverWait(driver, 10).until(
+                                    EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
+                                )
+                                time.sleep(0.4)
+                                next_button.click()
+                                links_click += 1
+                                print(f"\nClicked Next button {links_click} times")
+                                print("Successfully clicked Next Button. Navigating to the next page")
+                                time.sleep(1)
+                                print(f"Navigated to Page {links_click + 1}\n")
+                                continue#skipping current iteration
+                            except TimeoutException:
+                                print("Next button not found or not clickable. Exiting loop.")
+                                break    
                     except Exception as e:
-                        print(f"Error during Apply/Table/Download steps in Batch {batch_start // batch_size + 1}: {e}")
-
+                        raise RuntimeError("Failed to process universities in batches") from e  
+                     
+                print(f"Batch {batch_start // batch_size + 1} - Selected {click_count} universities")    
                 print("\nAll batches processed successfully\n")
-              
+
                 # Attempt to click the "Next" button
                 time.sleep(3)
                 try:
@@ -395,10 +422,9 @@ try:
                         
             except Exception as e:
                 print(f"Error: {e}")
-                print("Error fetching universities")
-
-            # Final processing or merging (if needed)
-            print("\n-----Scraping Done-----")
+                print("Error in scraping the data. Exiting loop.")
+                break
+            
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
         
