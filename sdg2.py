@@ -330,7 +330,7 @@ try:
                                 print("Exiting the loop")
                                 break
                                  
-                        # Apply selections
+                        # Step 5: Apply selections
                         time.sleep(1)
                         try:
                             print("\n---Clicking Apply button---\n")
