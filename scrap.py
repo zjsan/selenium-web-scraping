@@ -273,7 +273,7 @@ try:
                 while attempt < max_retries:
                     try:
                         print("\n---Finding university container---")
-                        WebDriverWait(driver, 10).until(
+                        WebDriverWait(driver, 15).until(
                             EC.presence_of_element_located((By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']"))
                         )
                         element = driver.find_element(By.XPATH, "//div[@class='PeerSelect__Container-sc-cfs1fm-0 kNqusN']")
