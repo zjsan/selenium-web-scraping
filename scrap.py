@@ -333,7 +333,7 @@ try:
                                 university_name_buttons[index].click()
                                 click_count += 1
                                 print(f"Selected: {university_name_buttons[index].text}")
-                                time.sleep(0.3)  # Pause for UI responsiveness
+                                time.sleep(0.2)  # Pause for UI responsiveness
                             except Exception as e:
                                 print(f"Error clicking university button at index {index}: {e}")
 
