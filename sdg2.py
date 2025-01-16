@@ -12,6 +12,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 
 import logging
 import time 
@@ -130,10 +131,29 @@ try:
         EC.presence_of_element_located((By.XPATH, "//div[@class = 'PeerSelectWrapper__Wrapper-sc-brqol7-1 kACRoa']"))
     )
     
-    
+    # Helper Function to Wait for the iFrame and Switch
+    def switch_to_iframe(driver, iframe_xpath, retries=3):
+        for attempt in range(retries):
+            try:
+                # Wait for the iframe to be present
+                WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, iframe_xpath)))
+                # Switch to the iframe
+                driver.switch_to.frame(driver.find_element(By.XPATH, iframe_xpath))
+                print("\nSwitched to iframe")
+                return True
+            except (TimeoutException, StaleElementReferenceException):
+                print(f"Failed to switch to iframe. Retry {attempt + 1}/{retries}")
+                time.sleep(2)
+            except Exception as e:
+                print(f"Unexpected error during iframe switch: {e}")
+                return False
+        print("Failed to locate or switch to iframe after retries.")
+        return False
+
     time.sleep(1)
     try:
         
+        iframe_xpath = "//iframe[@id='ImpactDetails']"
         links_click = 0#clicked counter
         links_length = 17 #number for the remaining sdg link redirection
 
@@ -141,29 +161,15 @@ try:
         for i in range(links_length):
             
             time.sleep(3)  
-            driver.switch_to.default_content() #leave frame
-            # Wait for the iframe to load - new page
+              # Switch to default content
+            driver.switch_to.default_content()
+            print("\nSwitched to default content")
             
-            #insert logic for page refresh?
-            #for unexpected page refresh
-            max_retries = 3
-            attempt = 0
-            while attempt < max_retries:
-                try:
-                    time.sleep(3)
-                    print("Finding web page's iframe")
-                    element = WebDriverWait(driver, 15).until
-                    (EC.presence_of_element_located((By.XPATH, "//iframe[@id='ImpactDetails']")))
-                    print("---Iframe found---")
-                    time.sleep(1)
-                    print("\nProceeding to switch from default view to iframe\n")
-                    break
-                except TimeoutException:
-                    attempt += 1
-                    print("Iframe not found. Check if redirection worked.")
-                    print(f"Attempting to find Iframe. Retrying... ({attempt}/{max_retries})")
-                except Exception as e:
-                    raise RuntimeError("Failed to locate Iframe") from e       
+            # Handle unexpected page refresh or redirection
+            if not switch_to_iframe(driver, iframe_xpath):
+                print("Skipping this iteration due to iframe issue.")
+                continue   
+               
             #Switch to the iframe
             try:
                 time.sleep(2)
@@ -200,7 +206,7 @@ try:
             #Step 1: entering input in the country/region selection
             try:
                 #Scraping Logic
-                time.sleep(2)
+                time.sleep(2)               
                 country_name = "Philippines"
                 print("Finding location container")
                 element = WebDriverWait(driver,10).until(
@@ -358,22 +364,28 @@ try:
                             time.sleep(2)
                             print("---Table button clicked---")
 
-                            # Download the Excel file for the current batch
-                            time.sleep(1)
-                            element = WebDriverWait(driver, 10).until(
-                                EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
-                            )
-                            download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
-                            download_button.click()
-                            print("\n---Download button clicked---\n")
+                             # Open a new tab and switch back
+                            try:
+                                # Open a new tab
+                                driver.execute_script("window.open('');")
+                                driver.switch_to.window(driver.window_handles[1])
+                                driver.get("http://stackoverflow.com")
+                                print("Switched to new tab and navigated to a new page")
+                                
+                                time.sleep(3)
 
-                            WebDriverWait(driver, 10).until(
-                                EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
-                            )
-                            download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
-                            download_excel.click()
-                            print(f"\n---Batch {batch_start // batch_size + 1} downloaded---\n")
-                            time.sleep(5)  # Wait for download completion
+                                # Switch back to the first tab
+                                driver.switch_to.window(driver.window_handles[0])
+                                print("Switched back to the original tab")
+
+                                # Ensure iframe is still accessible after switching tabs
+                                if not switch_to_iframe(driver, iframe_xpath):
+                                    print("Iframe not found after switching back. Skipping iteration.")
+                                    continue
+                            except Exception as e:
+                                print(f"Error during tab switching: {e}")
+                                break
+                           
                             print("\nAll batches processed successfully\n")
                             
                         except Exception as e:
