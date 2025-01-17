@@ -19,30 +19,32 @@ import pandas as pd
 import numpy as np
 import os
 
+# Desired download directory
+download_directory = r"C:\Users\User\Documents\SDG Datas\Scraping\Scrap data"
+
+# Verify directory exists
+if not os.path.exists(download_directory):
+    os.makedirs(download_directory)
 
 # Set up Chrome options
-chrome_options = Options()
-chrome_options.add_argument("--incognito")
+chrome_options = webdriver.ChromeOptions()
+# Remove incognito mode (it might override preferences)
+# chrome_options.add_argument("--incognito")  
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Helps bypass detection
 
-# Define the custom download directory (ensure it exists)
-download_dir = r"C:\Users\User\Documents\SDG Datas\Scraping\Scrap data"  # Use raw string for Windows paths
+# Set up preferences for downloads
+prefs = {
+    "download.default_directory": download_directory,  # Set custom download directory
+    "download.prompt_for_download": False,            # Disable download prompt
+    "directory_upgrade": True,                        # Allow directory change
+    "safebrowsing.enabled": True,                     # Enable safe browsing
+    "profile.default_content_settings.popups": 0      # Disable popups
+}
+chrome_options.add_experimental_option("prefs", prefs)
 
-# Ensure the directory exists
-os.makedirs(download_dir, exist_ok=True)
-
-chrome_options.add_experimental_option('prefs', {
-    "profile.default_content_settings.popups": 0,
-    "download.default_directory": download_dir,
-    "download.prompt_for_download": False,
-    "directory_upgrade": True,
-    "safebrowsing.enabled": True
-})
-
-
-service = Service(executable_path = "chromedriver.exe")
-driver = webdriver.Chrome(service=service)
-
+# Initialize WebDriver
+service = Service(executable_path="chromedriver.exe")  # Update path as needed
+driver = webdriver.Chrome(service=service, options=chrome_options)
 
 # Login credentials
 username = "jpacang@mmsu.edu.ph"
@@ -344,47 +346,44 @@ try:
                     
                         # Apply selections
                         # Step 5: Apply selections
-                        time.sleep(1)
+                        time.sleep(2)
                         try:
                             print("\n---Clicking Apply button---\n")
+                            element = WebDriverWait(driver, 5).until(
+                            EC.presence_of_element_located((By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']"))
+                            )   
                             apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
                             apply_button.click()
                             time.sleep(2)
 
                             # Click the Table button
                             print("---Clicking Table button---\n")
+                            element = WebDriverWait(driver, 5).until(
+                            EC.presence_of_element_located((By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']"))
+                            )   
                             table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
                             table_button.click()
                             time.sleep(2)
                             print("---Table button clicked---")
 
-                            
-                            # Open a new window
-                            driver.execute_script("window.open('');")
-                            # Switch to the new window
-                            driver.switch_to.window(driver.window_handles[1])
-                            driver.get("http://stackoverflow.com")
-                            time.sleep(3)
-                            # Switch back to the first tab
-                            driver.switch_to.window(driver.window_handles[0])
-                            time.sleep(4)
-                            
-                            # # Download the Excel file for the current batch
-                            # time.sleep(1)
-                            # element = WebDriverWait(driver, 10).until(
-                            #     EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
-                            # )
-                            # download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
-                            # download_button.click()
-                            # print("\n---Download button clicked---\n")
+                            # Download the Excel file for the current batch
+                            time.sleep(1)
+                            element = WebDriverWait(driver, 10).until(
+                                EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
+                            )
+                            download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
+                            download_button.click()
+                            print("\n---Download button clicked---\n")
 
-                            # WebDriverWait(driver, 10).until(
-                            #     EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
-                            # )
-                            # download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
-                            # download_excel.click()
-                            # print(f"\n---Batch {batch_start // batch_size + 1} downloaded---\n")
-                            # time.sleep(5)  # Wait for download completion
+                            WebDriverWait(driver, 10).until(
+                                EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
+                            )
+                            download_excel = driver.find_element(By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']")
+                            download_excel.click()
+                            print(f"\n---Batch {batch_start // batch_size + 1} downloaded---\n")
+                            print(f"Downloading file to: {download_directory}")    
+
+                            time.sleep(5)  # Wait for download completion
                             print("\nAll batches processed successfully\n")
                             
                         except Exception as e:
