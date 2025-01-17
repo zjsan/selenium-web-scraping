@@ -71,8 +71,13 @@ try:
   )
   email_button.click()
   
-#   el = wait.until(EC.element_to_be_clickable((By.ID, "password")))
-#   el.send_keys(password)  # Enter password
+  el = wait.until(EC.element_to_be_clickable((By.NAME, "Passwd")))
+  el.send_keys(password)  # Enter password
+  password_button = WebDriverWait(driver, 10).until(
+      EC.element_to_be_clickable((By.XPATH, "//button[@class='VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-k8QpJ VfPpkd-LgbsSe-OWXEXe-dgl2Hf nCP5yc AjY5Oe DuMIQc LQeN7 BqKGqe Jskylb TrZEUc lw1w4b']"))
+  )
+  password_button.click()
+  
 #   # Wait for the "New" button to be clickable
 #   new_button = WebDriverWait(driver, 10).until(
 #       EC.element_to_be_clickable((By.XPATH, "//span[text()='New']"))
