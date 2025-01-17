@@ -226,7 +226,7 @@ try:
                 #check if input value is Philippines
                 try:
                     time.sleep(1)
-                    element = WebDriverWait(driver,5).until(
+                    element = WebDriverWait(driver,10).until(
                         EC.presence_of_element_located((By.XPATH, "//input[@id='downshift-2-input']"))
                     )
                     
@@ -348,32 +348,40 @@ try:
                         # Step 5: Apply selections
                         time.sleep(2)
                         try:
-                            print("\n---Clicking Apply button---\n")
-                            element = WebDriverWait(driver, 5).until(
-                            EC.presence_of_element_located((By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']"))
-                            )   
-                            apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
-                            apply_button.click()
-                            time.sleep(2)
-
+                            try:
+                                print("\n---Clicking Apply button---\n")
+                                element = WebDriverWait(driver, 10).until(
+                                EC.presence_of_element_located((By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']"))
+                                )   
+                                apply_button = driver.find_element(By.XPATH, "//button[@class='PeerSelect__ApplyButton-sc-cfs1fm-9 frSOwt']")
+                                apply_button.click()
+                            except Exception as e:
+                                print(f"Error during Apply steps in Batch {batch_start // batch_size + 1}: {e}")
+                                
                             # Click the Table button
-                            print("---Clicking Table button---\n")
-                            element = WebDriverWait(driver, 5).until(
-                            EC.presence_of_element_located((By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']"))
-                            )   
-                            table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
-                            table_button.click()
-                            time.sleep(2)
-                            print("---Table button clicked---")
+                            try:
+                                print("---Clicking Table button---\n")
+                                element = WebDriverWait(driver, 10).until(
+                                EC.presence_of_element_located((By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']"))
+                                )   
+                                table_button = driver.find_element(By.XPATH, "//button[@class='TabSelector__Tab-sc-x9oxnj-1 ennyZL']")
+                                table_button.click()
+                                time.sleep(2)
+                                print("---Table button clicked---")
+                            except Exception as e:
+                                print(f"Error during Table steps in Batch {batch_start // batch_size + 1}: {e}")
 
                             # Download the Excel file for the current batch
                             time.sleep(1)
-                            element = WebDriverWait(driver, 10).until(
-                                EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
-                            )
-                            download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
-                            download_button.click()
-                            print("\n---Download button clicked---\n")
+                            try:
+                                element = WebDriverWait(driver, 10).until(
+                                    EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']"))
+                                )
+                                download_button = driver.find_element(By.XPATH, "//button[@class='DownloadButton__TriggerButton-sc-plxomw-1 bTWVdx']")
+                                download_button.click()
+                                print("\n---Download button clicked---\n")
+                            except Exception as e:
+                                print(f"Error during Download steps in Batch {batch_start // batch_size + 1}: {e}")
 
                             WebDriverWait(driver, 10).until(
                                 EC.presence_of_element_located((By.XPATH, "//button[@class='DownloadButton__Download-sc-plxomw-4 hDjlSG']"))
@@ -393,10 +401,10 @@ try:
                             time.sleep(3)
                             try:
                                 print("---Proceeding to the next page----")
-                                next_button = WebDriverWait(driver, 10).until(
+                                next_button = WebDriverWait(driver, 15).until(
                                     EC.element_to_be_clickable((By.XPATH, "//button[@class ='NavigationPanel__NextButton-sc-vkhyk2-5 kRDgoA']"))
                                 )
-                                time.sleep(0.4)
+                                time.sleep(0.5)
                                 next_button.click()
                                 links_click += 1
                                 print(f"\nClicked Next button {links_click} times")
