@@ -112,6 +112,8 @@ try:
         
         # Enter the folder path in the file dialog 
         pyautogui.write(folder_path, interval=0.25)
+        
+        time.sleep(1)
         pyautogui.press('enter')#select folder
         pyautogui.press('enter')#upload
         
