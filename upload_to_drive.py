@@ -112,23 +112,20 @@ try:
         
         # Enter the folder path in the file dialog 
         pyautogui.write(folder_path, interval=0.25)
-        
-        time.sleep(2)
+        time.sleep(1)
         pyautogui.press('enter')#select folder
         pyautogui.press('enter')#upload
         
         # Wait for the upload dialog and accept it 
-        time.sleep(2) 
-        # Adjust this based on the alert appearance time
-        try: 
-            alert = WebDriverWait(driver, 7).until(EC.alert_is_present())  # Wait for alert
-            alert.accept()  # Accept the alert
-            print("Upload confirmed.") 
-        except NoAlertPresentException:
-            print("No alert present")
+        time.sleep(5) 
+        # Click the "Upload" button in the confirmation dialog
+        pyautogui.press('left') 
+        pyautogui.press('enter')#upload
     except:
         print(f"Error: {e}")
         print("Error in folder upload")
+        
+  
   except Exception as e:
       print(f"Error: {e}")
       print("Error in clicking button")
