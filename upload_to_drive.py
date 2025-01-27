@@ -68,8 +68,8 @@ try:
     time.sleep(2)
     print("Attempting to login Google Drive authentication")
     #must hid credentials
-    username = "zdsantos@mmsu.edu.ph"
-    password = "Cur63706"
+    username = "email"
+    password = "password"
     wait = WebDriverWait(driver, 10)
     el = wait.until(EC.element_to_be_clickable((By.ID, "identifierId")))
     el.send_keys(username)  # Enter username
@@ -91,7 +91,6 @@ try:
       print(f"Error: {e}")
       print("Error in the login process")
   
-  #brbsPe Ss7qXc a-qb-d
   #clicking the new button
   try:
     
@@ -115,7 +114,7 @@ try:
         time.sleep(1)
         pyautogui.press('enter')#select folder
         pyautogui.press('enter')#upload
-        
+ 
         # Wait for the upload dialog and accept it 
         time.sleep(5) 
         # Click the "Upload" button in the confirmation dialog
@@ -130,24 +129,10 @@ try:
       print(f"Error: {e}")
       print("Error in clicking button")
   
-#   # Wait for the "New" button to be clickable
-#   new_button = WebDriverWait(driver, 10).until(
-#       EC.element_to_be_clickable((By.XPATH, "//span[text()='New']"))
-#   )
-#   new_button.click()
 
-#   # Click on "Folder upload"
-#   folder_upload_button = WebDriverWait(driver, 10).until(
-#       EC.element_to_be_clickable((By.XPATH, "//div[text()='Folder upload']"))
-#   )
-#   folder_upload_button.click()
-
-#   # Select the folder to upload
-#   file_input = driver.find_element(By.CSS_SELECTOR, 'input[type="file"]')
-#   file_input.send_keys(folder_path)
-
-  # Wait for the upload to complete (you might need to adjust this based on the file size)
-  time.sleep(60)  # Adjust this value as needed
+  # Wait for the upload to complete (might need to adjust this based on the file size)
+  #150
+  time.sleep(90)  # Adjust this value as needed
 except Exception as e:
     print(f"Error: {e}")
     print("Error in the google drive folder")
