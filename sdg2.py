@@ -20,7 +20,7 @@ import numpy as np
 import os
 
 # Desired download directory
-download_directory = r"C:\Users\User\Documents\SDG Datas\Scraping\Scrap data"
+download_directory = r"C:\Users\User\Documents\SDG Datas\Scraping\Datas - SDG"
 
 # Verify directory exists
 if not os.path.exists(download_directory):
@@ -47,8 +47,8 @@ service = Service(executable_path="chromedriver.exe")  # Update path as needed
 driver = webdriver.Chrome(service=service, options=chrome_options)
 
 # Login credentials
-username = "email"
-password = "password"
+username = "jpacang@mmsu.edu.ph"
+password = "awanpasswordna"
 
 wait = WebDriverWait(driver, 10)
 
@@ -78,7 +78,7 @@ try:
        element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//div[@class = 'chakra-modal__body css-1tcbjr4']"))
         )
-       container = WebDriverWait(driver,5).until(
+       container = WebDriverWait(driver,8).until(
            EC.presence_of_element_located((By.XPATH, "//div[@class = 'css-kfokcf']"))
        )
        mmsu = driver.find_element(By.XPATH, "//div[@class = 'css-18oq3rf']/img[@alt ='Mariano Marcos State University logo']")
@@ -89,7 +89,7 @@ try:
     
     #navigating through the page and finding an element
     try:
-        element = WebDriverWait(driver, 13).until(
+        element = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.XPATH, "//p[@class='chakra-text css-1qawl6f']"))
         )
         print("\n\n",element.text)
@@ -142,7 +142,7 @@ try:
         #main loop for page navigation
         for i in range(links_length):
             
-            time.sleep(3)  
+            time.sleep(4)  
             driver.switch_to.default_content() #leave frame
             # Wait for the iframe to load - new page
             
@@ -420,7 +420,7 @@ try:
                   
                 #Step 6: Proceeding to next page     
                 # Attempt to click the "Next" button
-                time.sleep(3)
+                time.sleep(5)
                 try:
                     print("---Proceeding to the next page----")
                     next_button = WebDriverWait(driver, 10).until(
