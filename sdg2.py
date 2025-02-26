@@ -47,8 +47,8 @@ service = Service(executable_path="chromedriver.exe")  # Update path as needed
 driver = webdriver.Chrome(service=service, options=chrome_options)
 
 # Login credentials
-username = "jpacang@mmsu.edu.ph"
-password = "awanpasswordna"
+username = ""
+password = ""
 
 wait = WebDriverWait(driver, 10)
 

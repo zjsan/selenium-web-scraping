@@ -42,8 +42,8 @@ driver = webdriver.Chrome(service=service)
 
 
 # Login credentials
-username = "jpacang@mmsu.edu.ph"
-password = "awanpasswordna"
+username = ""
+password = ""
 
 wait = WebDriverWait(driver, 10)
 
