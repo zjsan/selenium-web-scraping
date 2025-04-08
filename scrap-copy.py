@@ -210,6 +210,37 @@ try:
                 break
             
             #----Scraping Logic here-----
+            
+            #Reference group selection
+            refenceGroup = "" #manually enter the desired refence group
+            try: 
+                
+                if refenceGroup == "":
+                    print("Default Worldwide reference group is selected")
+                else:
+                    
+                    #finding and selecting the reference group input field
+                    element = WebDriverWait(driver,5).until(
+                        EC.presence_of_element_located((By.XPATH, "//div[@class='LocationSearch__Container-sc-1dp07t6-0 dhVVKS']//input"))
+                    )
+                    reference_group_input = driver.find_element(By.XPATH, "//div[@class='LocationSearch__Container-sc-1dp07t6-0 dhVVKS']//input")
+                    print("Selected {} as the reference group".format( refenceGroup))
+                    #typing the reference group in the input field
+                    reference_group_input.clear()
+                    reference_group_input.click()#to prevent unwanted country name 
+                    for char in refenceGroup:
+                        
+                        reference_group_input.send_keys(char)
+                        time.sleep(0.4)
+
+                    # After typing, select from dropdown
+                    reference_group_input.send_keys(Keys.ARROW_DOWN)
+                    reference_group_input.send_keys(Keys.ENTER) 
+                    
+            except Exception as e:
+                    print("Can't find the reference group input value")
+                    print(f"Error: {e}")   
+                    
             #Step 1: entering input in the country/region selection
             try:
                 #Scraping Logic
@@ -253,7 +284,6 @@ try:
                         except TimeoutException:
                             print("Next button not found or not clickable. Exiting loop.")
                             break   
-                        
                     else:
                         print("Region/Country is in the list.")      
                 except:
