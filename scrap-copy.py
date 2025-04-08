@@ -221,7 +221,6 @@ try:
                 )
                 print("Found location container")
                 country_input = driver.find_element(By.XPATH, "//input[@id='downshift-2-input']")
-                driver.find_element(By.XPATH, "//div[@role='combobox']").__setattr__("aria-expanded","true")#set combo box value to true to see list of regions/countries
                   
                 #Checking Region/Country container if the desired country is present    
                 try:
@@ -263,18 +262,17 @@ try:
                 print("typing country name\n")
                 
                 #typing the country name in the input field
+                country_input.clear()
+                country_input.click()#to prevent unwanted country name 
                 for char in country_name:
-                    #country_input.clear()
-                    #country_input.click()#to prevent unwanted country name 
+                    
                     country_input.send_keys(char)
                     time.sleep(0.4)
 
-                    if char == country_name[-1]:
-                        country_input.send_keys(Keys.ARROW_DOWN)
-                        country_input.send_keys(Keys.ENTER)
-                    else:
-                        print("Error in typing region/country name")   
-                        break 
+                # After typing, select from dropdown
+                country_input.send_keys(Keys.ARROW_DOWN)
+                country_input.send_keys(Keys.ENTER)
+                    
                 #check if input value is the desired country/region
                 try:
                     time.sleep(1)
