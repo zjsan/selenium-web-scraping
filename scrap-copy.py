@@ -58,8 +58,8 @@ driver = webdriver.Chrome(service=service)
 
 
 # Login credentials
-username = ""
-password = ""
+username = "jpacang@mmsu.edu.ph"
+password = "awanpasswordna"
 
 wait = WebDriverWait(driver, 10)
 
@@ -241,6 +241,29 @@ try:
                     print("Can't find the reference group input value")
                     print(f"Error: {e}")   
                     
+                    
+            filter_by_top_20 = False #keeping it at false to select the default filtering of SDG Peformance, otherwise it will filter the top 20 institutions   
+            
+            if filter_by_top_20:
+                try:
+                    
+                    print("Finding filter input")
+                    element = WebDriverWait(driver, 8).until(
+                    EC.presence_of_element_located((By.XPATH, "//ul[@class='the02318 the02319']"))
+                    )
+                    print("Filter input located")
+                    filter_input = driver.find_element(By.XPATH, "//ul[@class='the02318 the02319']")
+                    filter_input.click()   
+                    top20 = driver.find_element(By.XPATH, "//ul[@class='the02318 the02319']/li[2]")    
+                    print("Selected {} filter as ".format(top20))
+                    top20.click()
+                    print("Successfully selected filter")
+                    
+                except Exception as e:
+                    print("Can't find the filter selection value")
+                    print(f"Error: {e}")   
+                        
+                
             #Step 1: entering input in the country/region selection
             try:
                 #Scraping Logic
