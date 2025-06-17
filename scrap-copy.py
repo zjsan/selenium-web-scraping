@@ -61,6 +61,11 @@ driver = webdriver.Chrome(service=service)
 username = "jpacang@mmsu.edu.ph"
 password = "awanpasswordna"
 
+#Reference group selection
+refenceGroup = "" #manually enter the desired refence group
+
+country_name = "Vietnam" #change to specific country selection
+
 wait = WebDriverWait(driver, 10)
 
 try:
@@ -210,9 +215,6 @@ try:
                 break
             
             #----Scraping Logic here-----
-            
-            #Reference group selection
-            refenceGroup = "" #manually enter the desired refence group
             try: 
                 
                 if refenceGroup == "":
@@ -268,7 +270,6 @@ try:
             try:
                 #Scraping Logic
                 time.sleep(2)
-                country_name = "Vietnam" #change to specific country selection
                 print("Finding location container")
                 element = WebDriverWait(driver,10).until(
                     EC.presence_of_element_located((By.XPATH, "//div[@class = 'LocationSearch__Container-sc-1dp07t6-0 dhVVKS']"))
