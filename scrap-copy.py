@@ -148,7 +148,6 @@ try:
         EC.presence_of_element_located((By.XPATH, "//div[@class = 'PeerSelectWrapper__Wrapper-sc-brqol7-1 kACRoa']"))
     )
     
-    
     time.sleep(1)
     try:
         
