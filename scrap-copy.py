@@ -64,7 +64,7 @@ password = "awanpasswordna"
 #Reference group selection
 refenceGroup = "" #manually enter the desired refence group
 
-country_name = "Vietnam" #change to specific country selection
+country_name = "Philippines" #change to specific country selection
 
 wait = WebDriverWait(driver, 10)
 
