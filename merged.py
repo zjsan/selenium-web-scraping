@@ -16,7 +16,9 @@ def mergedExcels(filepath):
             raise FileNotFoundError("No Excel files found in the directory.")
 
         # Define sheets of interest
-        xls = ['SDG Overall', 'Metric Scores', 'Indicator Scores']
+        #xls = ['SDG Overall', 'Metric Scores', 'Indicator Scores']
+
+        xls = ['Indicator Scores']
 
         # Dictionary to store data for each sheet
         sheet_data = {sheet: pd.DataFrame() for sheet in xls}
@@ -57,7 +59,9 @@ def mergedExcels(filepath):
 #r'C:\Users\User\Documents\SDG Datas\SDGs\SDGs By part\SDG4'
 #r'C:\Users\User\Documents\SDG Datas\SDGs\SDGs By part\SDG5'
 #r'C:\Users\User\Documents\SDG Datas\SDGs\SDGs By part\SDG17'
-paths = [r'C:\Users\User\Documents\SDG Datas\SDGs\SDGs By part\SDG4', r'C:\Users\User\Documents\SDG Datas\SDGs\SDGs By part\SDG5', r'C:\Users\User\Documents\SDG Datas\SDGs\SDGs By part\SDG17' ]
+#r'C:\Users\User\Documents\SDG Datas\2025 Data\Indicators'
+
+paths = [r'C:\Users\User\Documents\SDG Datas\2025 Data\Indicators' ]
 
 for i in range(len(paths)):
     mergedExcels(paths[i])
