@@ -58,8 +58,8 @@ driver = webdriver.Chrome(service=service)
 
 
 # Login credentials
-username = "jpacang@mmsu.edu.ph"
-password = "awanpasswordna"
+username = "email"
+password = "password"
 
 #Reference group selection
 refenceGroup = "" #manually enter the desired refence group
