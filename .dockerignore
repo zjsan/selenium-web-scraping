@@ -1,0 +1,19 @@
+# Ignore the virtual environment (very important!)
+myenv/
+venv/
+.venv/
+
+# Ignore git history
+.git/
+.gitignore
+
+# Ignore local data and logs
+data/
+logs/
+*.log
+
+# Ignore environment secrets (we pass these via docker-compose instead)
+.env
+
+# Ignore python cache
+__pycache__/
