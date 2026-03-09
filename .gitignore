@@ -1,0 +1,19 @@
+# Environments
+.venv/
+myenv/
+env/
+venv/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data & Secrets
+.env
+data/
+*.xlsx
+*.csv
+
+# Docker
+.dockerignore
