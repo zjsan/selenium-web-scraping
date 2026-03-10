@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import WebDriverException
 import time 
 import os
 
@@ -26,7 +27,7 @@ for i in range(10):  # Try 10 times
 
 if not driver:
     print("Could not connect to Selenium after multiple attempts.")
-    exit(1)
+    exit(1) 
 
 try:
     element = driver.find_element(By.XPATH, "//div[@id='SIvCob']")
@@ -35,6 +36,7 @@ try:
     input_element = driver.find_element(By.XPATH, "//textarea[@class='gLFyf']")
     input_element.clear()
     input_element.send_keys("tech with tim" + Keys.ENTER)
+    print("Search successful")
 except Exception as e:
     print(f"Error: {e}")
     print("error")
