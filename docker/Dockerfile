@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY src/ ./src/
 
 # Create the downloads directory inside the container
-RUN mkdir /downloads
+RUN mkdir /data
 
 # Run the script
 CMD ["python", "src/main.py"]
