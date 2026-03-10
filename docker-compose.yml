@@ -3,5 +3,15 @@ services:
     image: selenium/standalone-chrome:latest
     ports:
       - "4444:4444"
-      - "7900:7900"
+      - "7900:7900" #VNC port to watch the browser at localhost:7900
     shared_memory_size: 2g
+
+  scraper:
+    build: .
+    depends_on:
+      - selenium
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - ./data:/app/data
