@@ -4,13 +4,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 import time 
+import os
 
-service = Service(executable_path = "chromedriver.exe")
-driver = webdriver.Chrome(service=service)
+options = Options()
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+remote_url = os.getenv("SELENIUM_URL", "http://selenium:4444/wd/hub")
+driver = webdriver.Remote(command_executor=remote_url, options=options)
 
 driver.get("https://google.com")
-
 WebDriverWait(driver,5).until(
     EC.presence_of_element_located((By.XPATH, "//div[@id='SIvCob']"))
 )

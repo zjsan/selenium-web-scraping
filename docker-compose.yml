@@ -4,16 +4,17 @@ services:
     ports:
       - "4444:4444"
       - "7900:7900" #VNC port to watch the browser at localhost:7900
-    shared_memory_size: 2g
+    shm_size: 2g
 
   scraper:
-    build: .
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
     depends_on:
       - selenium
-    command: python test/test.py
+    command: python /app/test/test.py
     env_file:
       - .env
     volumes:
+      - .:/app
       - ./data:/app/data
-    environment:
-      - SELENIUM_REMOTE_URL=http://chrome:4444/wd/hub
