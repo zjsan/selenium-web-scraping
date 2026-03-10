@@ -12,12 +12,22 @@ options = Options()
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 remote_url = os.getenv("SELENIUM_URL", "http://selenium:4444/wd/hub")
-driver = webdriver.Remote(command_executor=remote_url, options=options)
 
-driver.get("https://google.com")
-WebDriverWait(driver,5).until(
-    EC.presence_of_element_located((By.XPATH, "//div[@id='SIvCob']"))
-)
+driver = None
+for i in range(10):  # Try 10 times
+    try:
+        print(f"Attempting to connect to Selenium (Attempt {i+1}/10)...")
+        driver = webdriver.Remote(command_executor=remote_url, options=options)
+        print("Connected successfully!")
+        break
+    except WebDriverException:
+        print("Selenium not ready yet, sleeping 5s...")
+        time.sleep(5)
+
+if not driver:
+    print("Could not connect to Selenium after multiple attempts.")
+    exit(1)
+
 try:
     element = driver.find_element(By.XPATH, "//div[@id='SIvCob']")
     print(element.text)
