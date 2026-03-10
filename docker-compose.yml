@@ -10,8 +10,10 @@ services:
     build: .
     depends_on:
       - selenium
+    command: python test/test.py
     env_file:
       - .env
     volumes:
-      - .:/app
       - ./data:/app/data
+    environment:
+      - SELENIUM_REMOTE_URL=http://chrome:4444/wd/hub
