@@ -1,3 +1,6 @@
+#use docker compose run scraper - manually running, best for development
+# docker compose up --build to start everything up
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service 
 from selenium.webdriver.common.by import By
@@ -39,7 +42,7 @@ try:
     element = wait.until(
         EC.presence_of_element_located((By.ID, "SIvCob"))
     )
-    
+
     print(element.text)
     print("Scrapping success")
     input_element = driver.find_element(By.XPATH, "//textarea[@class='gLFyf']")
