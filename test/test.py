@@ -10,8 +10,10 @@ import time
 import os
 
 options = Options()
+options.add_argument("--headless=new")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
+
 remote_url = os.getenv("SELENIUM_URL",  "http://selenium:4444")
 
 driver = None
