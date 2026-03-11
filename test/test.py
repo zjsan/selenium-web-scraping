@@ -12,7 +12,7 @@ import os
 options = Options()
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
-remote_url = os.getenv("SELENIUM_URL", "http://selenium:4444/wd/hub")
+remote_url = os.getenv("SELENIUM_URL",  "http://selenium:4444")
 
 driver = None
 for i in range(10):  # Try 10 times
@@ -30,6 +30,8 @@ if not driver:
     exit(1) 
 
 try:
+    driver.get("https://www.google.com")#url to scrape
+
     element = driver.find_element(By.XPATH, "//div[@id='SIvCob']")
     print(element.text)
     print("Scrapping success")
