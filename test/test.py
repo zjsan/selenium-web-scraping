@@ -34,7 +34,12 @@ if not driver:
 try:
     driver.get("https://www.google.com")#url to scrape
 
-    element = driver.find_element(By.XPATH, "//div[@id='SIvCob']")
+    wait = WebDriverWait(driver, 10)
+
+    element = wait.until(
+        EC.presence_of_element_located((By.ID, "SIvCob"))
+    )
+    
     print(element.text)
     print("Scrapping success")
     input_element = driver.find_element(By.XPATH, "//textarea[@class='gLFyf']")
